@@ -69,6 +69,7 @@ describe PostsController do
                        :id => @post
       response.should redirect_to(home_url)
     end
+
   end
   
   describe "blog posts" do

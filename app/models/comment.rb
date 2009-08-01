@@ -63,17 +63,21 @@ class Comment < ActiveRecord::Base
       commentable.class.to_s == "BlogPost"
     end
 
-    def event_comment?
-      commentable.class.to_s == "Event"
-    end
-    
-    def notifications?
-      if wall_comment?
-        commented_person.wall_comment_notifications?
-      elsif blog_post_comment?
-        commented_person.blog_comment_notifications?
-      end
-    end
+    # TODO: Not yet implemented (requires migration)
+    # def event_comment?
+    #   commentable.class.to_s == "Event"
+    # end
+
+    # TODO: Not used.
+    # def notifications?
+    #   if wall_comment?
+    #     commented_person.wall_comment_notifications?
+    #   elsif blog_post_comment?
+    #     commented_person.blog_comment_notifications?
+    #   # elsif event_comment?
+    #   #   commented_person.event_comment_notifications?
+    #   end
+    # end
   
     def log_activity
       activity = Activity.create!(:item => self, :person => commenter)
@@ -94,6 +98,10 @@ class Comment < ActiveRecord::Base
         @send_mail ||= Comment.global_prefs.email_notifications? &&
                        commented_person.blog_comment_notifications?
         PersonMailer.deliver_blog_comment_notification(self) if @send_mail
+      # elsif event_comment?
+      #   @send_mail ||= Comment.global_prefs.email_notifications? &&
+      #                  commented_person.event_comment_notifications?
+      #   PersonMailer.deliver_event_comment_notification(self) if @send_mail
       end
     end
 end

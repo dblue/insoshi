@@ -19,6 +19,15 @@ describe Connection do
       status(@contact, @person).should == Connection::REQUESTED
     end
   
+    it "should not duplicate a connection" do
+      Connection.request(@person, @contact)
+      Connection.request(@person, @contact).should == nil
+    end
+    
+    it "should not connect a person to himself or herself" do
+      Connection.request(@person, @person).should == nil
+    end
+    
     it "should send an email when global/contact notifications are on" do
       # Both notifications are on by default.
       lambda do

@@ -76,6 +76,11 @@ describe Message do
     @next_message.should_not be_reply
     @next_message.parent.should_not be_replied_to
   end
+
+  it "should check for valid reply pairs" do
+    @message.valid_reply_pair?(@sender, @recipient).should be_true
+    @message.valid_reply_pair?(@sender, @sender).should be_false
+  end
   
   it "should mark messages as read" do
     @message.mark_as_read

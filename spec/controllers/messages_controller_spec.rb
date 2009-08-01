@@ -62,6 +62,14 @@ describe MessagesController do
       response.should redirect_to(home_url)
     end
     
+    it "should handle previews" do
+      post :create, :message => { :subject => "The subject",
+                                  :content => "Hey there!" },
+                    :person_id => @other_person,
+                    :commit => "Preview"
+      response.should render_template(:new)
+    end
+    
     it "should create a message" do
       lambda do
         post :create, :message => { :subject => "The subject",
@@ -92,15 +100,35 @@ describe MessagesController do
       assigns(:message).should_not be_trashed(@message.sender)
     end
     
+    it "should handle the errors from trash" do
+      Message.stub!(:find).and_return(@message)
+      @message.stub!(:trash).and_return(false)
+      delete :destroy, :id => @message
+      flash[:error].should == "Invalid action"
+    end
+      
     it "should untrash messages" do
       delete :destroy, :id => @message
       put :undestroy, :id => @message
       assigns(:message).should_not be_trashed(@message.recipient)
     end
+
+    it "should handle the errors from untrash" do
+      Message.stub!(:find).and_return(@message)
+      @message.stub!(:untrash).and_return(false)
+      put :undestroy, :id => @message
+      flash[:error].should == "Invalid action"
+    end
     
     it "should require login" do
       logout
       get :index
+      response.should redirect_to(login_url)
+    end
+    
+    it "should redirect incorrect people for show" do
+      login_as(:kelly)
+      get :show, :id => @message
       response.should redirect_to(login_url)
     end
   end

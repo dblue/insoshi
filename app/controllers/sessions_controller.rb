@@ -55,8 +55,7 @@ class SessionsController < ApplicationController
         end # if new record
 
         if @person.deactivated?
-          flash[:error] = "Your account has been deactivated"
-          redirect_to home_url and return
+          deactivated_login and return
         end
 
         successful_login
@@ -82,12 +81,17 @@ class SessionsController < ApplicationController
     flash[:notice] = message
   end
 
+  def deactivated_login(message = "Your account has been deactivated")
+    @body = "login single-col"
+    flash.now[:error] = message
+    redirect_to home_url
+  end
+  
   def password_authentication(login, password)
     person = Person.authenticate(login, password)
     unless person.nil?
       if person.deactivated?
-        flash[:error] = "Your account has been deactivated"
-        redirect_to home_url and return
+        deactivated_login and return
       elsif global_prefs.email_verifications? and 
             not person.email_verified? and not person.admin?
         flash[:notice] = %(Unverified email address. 

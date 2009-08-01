@@ -88,6 +88,8 @@ class CommentsController < ApplicationController
         current_person?(person) or current_person?(@comment.commenter)
       elsif blog?
         current_person?(person)
+      elsif event?
+        current_person?(person)
       end
     end
     
@@ -98,6 +100,7 @@ class CommentsController < ApplicationController
     ## Handle wall and blog comments in a uniform manner.
     
     # Return the comments array for the given resource.
+    # DB: This seems redundant with #parent and is never used. REFACTOR?
     def resource_comments
       if wall?
         @person.comments

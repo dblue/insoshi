@@ -14,6 +14,7 @@ quentin:
   wall_comment_notifications: true
   blog_comment_notifications: true
   email_verified: true
+  identity_url: quentin.openid.com
 
 aaron:
   email: aaron@example.com
@@ -27,7 +28,8 @@ aaron:
   wall_comment_notifications: true
   blog_comment_notifications: true
   email_verified: true
-
+  identity_url: aaron.openid.com
+  
 kelly:
   email: kelly@example.com
   name: Kelly
@@ -39,7 +41,8 @@ kelly:
   message_notifications: true
   wall_comment_notifications: true
   blog_comment_notifications: true
-  
+  identity_url: kelly.openid.com
+    
 admin:
   email: admin@example.com
   name: admin
@@ -52,7 +55,8 @@ admin:
   message_notifications: true
   wall_comment_notifications: true
   blog_comment_notifications: true
-
+  identity_url: admin.openid.com
+  
 deactivated:
   email: deactivated@example.com
   name: Deactivated Person
@@ -60,6 +64,7 @@ deactivated:
   crypted_password: <%= password %>
   created_at: <%= 1.day.ago.to_s :db %>
   deactivated: true
+  identity_url: deactivated.openid.com  
 
 email_unverified:
   email: inactive@example.com
@@ -68,4 +73,4 @@ email_unverified:
   crypted_password: <%= password %>
   created_at: <%= 1.day.ago.to_s :db %>
   email_verified: false 
-  
+  identity_url: unverified@openid.com  

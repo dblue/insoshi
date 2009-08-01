@@ -59,6 +59,13 @@ describe PeopleController do
       response.should redirect_to(home_url)
       flash[:error].should =~ /not active/
     end
+    
+    it "should have a working common_contacts page" do
+      login_as @person
+      get :common_contacts, :id => @person
+      response.should be_success
+      response.should render_template("common_contacts")
+    end
   end
   
   describe "create" do
@@ -97,6 +104,32 @@ describe PeopleController do
       end.should_not change(Person, :count)
     end
     
+    it 'handles errors with OpenID gracefully' do
+      lambda do
+        session[:verified_identity_url] = "test.com"
+        # NOTE: Force it to fail.
+        create_person(:name => nil)
+        response.should render_template("shared/_personal_details")
+      end.should_not change(Person, :count)
+    end 
+    
+    it 'handles duplicate email addresses gracefully by redirecting' do
+      lambda do
+        Person.stub!(:new).and_raise(ActiveRecord::StatementInvalid)
+        create_person()
+        response.should redirect_to(home_url)
+      end.should_not change(Person, :count)
+    end
+
+    it 'handles invalid authentication tokens gracefully by redirecting' do
+      lambda do
+        Person.stub!(:new).and_raise(ActionController::InvalidAuthenticityToken)
+        controller.logger.should_receive(:warn)
+        create_person()
+        response.should redirect_to(home_url)
+      end.should_not change(Person, :count)
+    end
+        
     describe "email verifications" do
       
       before(:each) do
@@ -216,6 +249,43 @@ describe PeopleController do
                    :type => "password_edit"
       response.should redirect_to(person_url(@person))
     end
+    
+    it "should allow for previews" do
+      controller.should_receive(:preview?).twice.and_return(true)
+      put :update, :id => @person, :person => { :description => 'Me!'},
+                   :type => 'info_edit'
+      response.should be_success
+      response.should render_template('edit')
+      assigns(:preview).should_not be_nil
+    end
+    
+    it "should not change the password in demo mode" do
+      mock_global_preferences = mock_model(Preference, :demo? => true)
+      controller.stub!(:global_prefs).and_return(mock_global_preferences)
+
+      current_password = @person.unencrypted_password
+      newpass = "dude"
+      put :update, :id => @person,
+                   :person => { :verify_password => current_password,
+                                :new_password => newpass,
+                                :password_confirmation => newpass },
+                   :type => "password_edit"
+      flash[:error].should_not be_nil
+      response.should be_redirect
+    end
+    
+    it "should fail gracefully if unable to change the password" do
+      @person.should_receive(:change_password?).and_return(false)
+      Person.stub!(:find).and_return(@person)
+      current_password = @person.unencrypted_password
+      newpass = "dude"
+      put :update, :id => @person,
+                   :person => { :verify_password => current_password,
+                                :new_password => newpass,
+                                :password_confirmation => newpass },
+                   :type => "password_edit"
+      response.should render_template(:edit)
+    end
   end
   
   describe "show" do
@@ -260,7 +330,7 @@ describe PeopleController do
       response.should_not have_tag("a", :text => "Remove Connection")
     end
   end
-  
+
   private
 
     def create_person(options = {})

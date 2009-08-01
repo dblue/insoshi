@@ -48,7 +48,6 @@ describe EventsController do
       events.should_receive(:person_events).with(@person).and_return(events)
       get :index, :day => Time.now.mday
     end
-
   
     it "should assign the found events for the view" do
       Event.should_receive(:find).and_return([mock_event])

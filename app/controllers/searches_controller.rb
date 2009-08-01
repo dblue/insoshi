@@ -16,7 +16,10 @@ class SearchesController < ApplicationController
       redirect_to home_url and return
     end
 
-    if query.blank?
+    # NOTE: This line will never execute; #inspect will put
+    # the string in quotation marks.
+    # if query.blank?
+    if query == '""'
       @search  = [].paginate
       @results = []
     else

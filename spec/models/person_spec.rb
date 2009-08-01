@@ -99,6 +99,12 @@ describe Person do
       person.destroy
       initial_person.reload.activities.length.should == 0
     end
+    
+    it "should return a person-specific activity feed" do
+      mock_activities = [mock_model(Activity)] * (Person::FEED_SIZE + 1)
+      @person.stub!(:activities).and_return(mock_activities)
+      @person.feed.should == mock_activities
+    end
   end
 
   describe "utility methods" do
@@ -277,8 +283,18 @@ describe Person do
     it "should have unread messages" do
       @person.has_unread_messages?.should be_true
     end
+    
+    it "should have recent messages" do
+      @person.recent_messages.should_not be_nil
+    end
   end
 
+  describe "forum associations" do
+    it "should have forum post" do
+      @person.forum_posts.should_not be_nil
+    end
+  end
+  
   describe "authentication" do
     it 'resets password' do
       @person.update_attributes(:password => 'newp',
@@ -379,7 +395,14 @@ describe Person do
   end
 
   describe "activation" do
-
+    it "should check config settings for whitelist preferences before saving" do
+      mock_preference = mock_model(Preference, :whitelist? => true)
+      Person.stub!(:global_prefs).and_return(mock_preference)
+      p = create_person
+      p.save
+      p.should be_deactivated
+    end
+    
     it "should deactivate a person" do
       @person.should_not be_deactivated
       @person.toggle(:deactivated)

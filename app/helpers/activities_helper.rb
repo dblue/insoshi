@@ -36,14 +36,23 @@ module ActivitiesHelper
           %(#{person_link_with_image(activity.item.commenter)}
             commented on #{wall(activity)})
         end
+      when "Event"
+        event = activity.item.commentable
+        if recent
+          %(commented on #{event_link(event.title, event)})
+        else
+          %(#{person_link_with_image(activity.item.commenter)}
+            commented on #{event_link(event.title, event)})
+        end  
       end
-    when "Event"
-      # TODO: make recent/long versions for this
-      event = activity.item.commentable
-      commenter = activity.item.commenter
-      %(#{person_link_with_image(commenter)} commented on 
-        #{someones(event.person, commenter)} event: 
-        #{event_link(event.title, event)}.)
+    # DB: Isn't this handled below?
+    # when "Event"
+    #   # TODO: make recent/long versions for this
+    #   event = activity.item.commentable
+    #   commenter = activity.item.commenter
+    #   %(#{person_link_with_image(commenter)} commented on 
+    #     #{someones(event.person, commenter)} event: 
+    #     #{event_link(event.title, event)}.)
     when "Connection"
       if activity.item.contact.admin?
         if recent
@@ -159,7 +168,6 @@ module ActivitiesHelper
     when "Photo"
       %(#{person_link(person)} added new
         #{photo_link(activity.item)} #{to_gallery_link(activity.item.gallery)})
-      %(#{person_link(person)}'s description has changed.)
     when "Event"
       %(#{person_link(person)}'s has created a new
         #{event_link("event", activity.item)}.)

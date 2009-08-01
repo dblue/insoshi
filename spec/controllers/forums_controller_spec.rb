@@ -19,4 +19,10 @@ describe ForumsController do
       get :index
     end.should raise_error("NotImplementedError")
   end
+  
+  it "should show a forum" do
+    get :show, :id => Forum.find(:first)
+    response.should be_success
+  end
+  
 end

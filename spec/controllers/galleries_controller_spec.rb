@@ -43,6 +43,73 @@ describe GalleriesController do
       @gallery.should_not exist_in_database
     end
     
+    describe "with an unsuccessful create" do
+      before :each do
+        Gallery.stub!(:new).and_return(@gallery)
+        @gallery.stub!(:save).and_return(false)
+      end
+      
+      it "should assign @gallery" do
+        post :create, :gallery => {}
+        gallery = assigns(:gallery)
+        gallery.title.should == "Title"
+        gallery.description.should == "Some description"
+      end
+      
+      it "should put a message in flash[:error]" do
+        post :create, :gallery => {}
+        flash[:error].should == nil
+      end
+      
+      it "should render the new template" do
+        post :create, :gallery => {}
+        response.should render_template(:new)
+      end  
+    end
+    
+    describe "with a successful update" do
+      # before :each do
+      #   Gallery.stub!(:new).and_return(@gallery)
+      #   @gallery.stub!(:save).and_return(true)
+      # end
+
+      it "should assign @gallery" do
+        post :update, :id => @gallery
+        gallery = assigns(:gallery)
+        gallery.title.should == "Title"
+        gallery.description.should == "Some description"
+      end
+      
+      it "should put a message in flash[:success]" do
+        post :update, :id => @gallery
+        flash[:success].should == "Gallery successfully updated"
+      end
+      
+      it "should redirect" do
+        post :update, :id => @gallery
+        response.should redirect_to( gallery_path(@gallery))
+      end
+    end
+    
+    describe "with an unsuccessful update" do
+      before :each do
+        Gallery.stub!(:find).and_return(@gallery)
+        @gallery.stub!(:update_attributes).and_return(false)
+      end
+      
+      it "should assign @gallery" do
+        post :update, :id => @gallery
+        gallery = assigns(:gallery)
+        gallery.title.should == "Title"
+        gallery.description.should == "Some description"
+      end
+      
+      it "should render new" do
+        post :update, :id => @gallery
+        response.should render_template(:new)
+      end
+    end
+
     it "should associate person to the gallery" do
       post :create, :gallery => {:title=>"Title"}
       assigns(:gallery).person.should == @person
@@ -65,6 +132,25 @@ describe GalleriesController do
       flash[:success].should =~ /successfully deleted/
       delete :destroy, :id => @person.reload.galleries.first
       flash[:error].should =~ /can't delete the final gallery/
+    end
+    
+    it "should set a flash error if the gallery could not be deleted" do
+      Gallery.stub!(:find).and_return(@gallery)
+      @gallery.stub!(:destroy).and_return(false)
+      delete :destroy, :id => @gallery
+      flash[:error].should == "Gallery could not be deleted"
+    end
+    
+    it "should set a flash error if a gallery cannot be found" do
+      Gallery.stub!(:find).and_return(nil)
+      delete :destroy, :id => @gallery
+      flash[:error].should == "No gallery found"
+    end
+
+    it "should redirect if a gallery cannot be found" do
+      Gallery.stub!(:find).and_return(nil)
+      delete :destroy, :id => @gallery
+      response.should redirect_to(person_galleries_path(@person))
     end
   end
 end

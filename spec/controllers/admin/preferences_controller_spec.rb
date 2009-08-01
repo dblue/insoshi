@@ -24,6 +24,11 @@ describe Admin::PreferencesController do
       login_as :admin
     end
     
+    it "should respond to 'show'" do
+      get :show
+      response.should be_success
+    end
+    
     it "should render messages for email notification error" do
       put :update, :preferences => { :smtp_server => "", :domain => "", 
                                      :email_notifications => "1" }

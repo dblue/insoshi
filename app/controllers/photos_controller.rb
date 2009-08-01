@@ -13,7 +13,6 @@ class PhotosController < ApplicationController
   def show
     @photo = Photo.find(params[:id])
   end
-
   
   def new
     @photo = Photo.new
@@ -24,7 +23,6 @@ class PhotosController < ApplicationController
   end
 
   def edit
-    @display_photo = @photo
     respond_to do |format|
       format.html
     end
@@ -58,7 +56,7 @@ class PhotosController < ApplicationController
         flash[:success] = "Photo successfully updated"
         format.html { redirect_to(gallery_path(@photo.gallery)) }
       else
-        format.html { render :action => "new" }
+        format.html { render :action => "edit" }
       end
     end
   end
@@ -74,12 +72,14 @@ class PhotosController < ApplicationController
   end
   
   def set_primary
-    @photo = Photo.find(params[:id])
+    # @photo is set by the correct_user_required before_filter    
+    # @photo = Photo.find(params[:id])
     if @photo.nil? or @photo.primary?
       redirect_to person_galleries_path(current_person) and return
     end
     # This should only have one entry, but be paranoid.
     @old_primary = @photo.gallery.photos.select(&:primary?)
+
     respond_to do |format|
       if @photo.update_attributes(:primary => true)
         @old_primary.each { |p| p.update_attributes!(:primary => false) }
@@ -95,8 +95,10 @@ class PhotosController < ApplicationController
   end
   
   def set_avatar
-    @photo = Photo.find(params[:id])
+    # @photo is set by the correct_user_required before_filter
+    # @photo = Photo.find(params[:id])
     if @photo.nil? or @photo.avatar?
+      flash[:error] = "Set Avatar: nil"
       redirect_to current_person and return
     end
     # This should only have one entry, but be paranoid.
@@ -121,6 +123,7 @@ class PhotosController < ApplicationController
     def correct_user_required
       @photo = Photo.find(params[:id])
       if @photo.nil?
+        flash[:error] = "Photo could not be loaded!"
         redirect_to home_url
       elsif !current_person?(@photo.person)
         redirect_to home_url

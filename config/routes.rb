@@ -26,10 +26,10 @@ ActionController::Routing::Routes.draw do |map|
   map.connect 'people/verify/:id', :controller => 'people',
                                    :action => 'verify_email'
   map.resources :people do |person|
-     person.resources :messages
-     person.resources :galleries
-     person.resources :connections
-     person.resources :comments
+    person.resources :messages
+    person.resources :galleries
+    person.resources :connections
+    person.resources :comments
   end
   
   map.resources :galleries do |gallery|
@@ -45,7 +45,7 @@ ActionController::Routing::Routes.draw do |map|
   end
   map.resources :blogs do |blog|
     blog.resources :posts do |post|
-        post.resources :comments
+      post.resources :comments
     end
   end
 

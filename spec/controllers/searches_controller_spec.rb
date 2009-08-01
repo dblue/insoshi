@@ -37,12 +37,18 @@ describe SearchesController do
       response.should redirect_to(home_url)
     end
 
+    it "should return empty for an empty query" do
+      get :index, :q => "", :model => "Person"
+      response.should be_success
+      assigns(:results).should == [].paginate
+    end
+      
     it "should return empty for a blank query" do
       get :index, :q => " ", :model => "Person"
       response.should be_success
       assigns(:results).should == [].paginate
     end
-    
+
     it "should return empty for a nil query" do
       get :index, :q => nil, :model => "Person"
       response.should be_redirect

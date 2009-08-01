@@ -145,6 +145,7 @@ class PostsController < ApplicationController
     end
     
     # Return the posts array for the given resource.
+    # NOTE: Is this necessary?  It is never called.
     def resource_posts
       if forum?
         @topic.posts

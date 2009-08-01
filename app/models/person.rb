@@ -193,13 +193,14 @@ class Person < ActiveRecord::Base
     contacts[(0...MAX_DEFAULT_CONTACTS)]
   end
 
-  # Contact links for the contact image raster.
-  def requested_contact_links
-    requested_contacts.map do |p|
-      conn = Connection.conn(self, p)
-      edit_connection_path(conn)
-    end
-  end
+  # TODO: Remove (not used)
+  # # Contact links for the contact image raster.
+  # def requested_contact_links
+  #   requested_contacts.map do |p|
+  #     conn = Connection.conn(self, p)
+  #     edit_connection_path(conn)
+  #   end
+  # end
 
   ## Message methods
 
@@ -288,7 +289,7 @@ class Person < ActiveRecord::Base
   # Authenticates a user by their email address and unencrypted password.
   # Returns the user or nil.
   def self.authenticate(email, password)
-    u = find_by_email_and_identity_url(email.downcase.strip, nil) # need to get the salt
+    u = find_by_email(email.downcase.strip, nil) # need to get the salt
     u && u.authenticated?(password) ? u : nil
   end
 
@@ -456,10 +457,8 @@ class Person < ActiveRecord::Base
       
       # Return the conditions for a user to be 'mostly' active.
       def conditions_for_mostly_active
-        [%(deactivated = ? AND 
-           (email_verified IS NULL OR email_verified = ?) AND
-           (last_logged_in_at IS NOT NULL AND
-            last_logged_in_at >= ?)),
+        # modified to register with rcov.
+        [%(deactivated = ? AND (email_verified IS NULL OR email_verified = ?) AND (last_logged_in_at IS NOT NULL AND last_logged_in_at >= ?)),
          false, true, TIME_AGO_FOR_MOSTLY_ACTIVE]
       end
     end

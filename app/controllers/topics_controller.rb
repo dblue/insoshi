@@ -4,9 +4,9 @@ class TopicsController < ApplicationController
   before_filter :admin_required, :only => [:edit, :update, :destroy]
   before_filter :setup
   
-  def index
-    redirect_to forum_url(params[:forum_id])
-  end
+  # def index
+  #   redirect_to forum_url(params[:forum_id])
+  # end
 
   def show
     @topic = Topic.find(params[:id])
