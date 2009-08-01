@@ -32,3 +32,6 @@ sphinx/*
 sphinx_test/*
 config/ultrasphinx/*.conf
 *.swp
+coverage/*
+.gitignore
+spec/rcov.opts
