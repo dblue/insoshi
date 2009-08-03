@@ -4,57 +4,51 @@ describe SearchesHelper do
   
   include SearchesHelper
   
-  describe "determine the model to be searched based on parameters" do
+  describe "#search_model" do
     it "should support the home controller" do
-      mock_params = { :controller => "home"}
-      helper.stub!(:params).and_return(mock_params)
-      helper.search_model.should == "Person"
-    end
-    
+      search_model_with(:controller => "home").should == "Person"
+    end    
     it "should support the forums controller" do
-      mock_params = { :controller => "forums"}
-      helper.stub!(:params).and_return(mock_params)
-      helper.search_model.should == "ForumPost"
+      search_model_with(:controller => "forums").should == "ForumPost"
     end
-    
+    it "should support the Group controller" do
+      search_model_with(:controller => "groups").should == "Group"
+    end
+    it "should support the Group action" do
+      search_model_with(:action => "groups").should == "Group"
+    end 
     it "should support other models when set explicitly" do
-      mock_params = { :model => "somemodel"}
-      helper.stub!(:params).and_return(mock_params)
-      helper.search_model.should == "somemodel"
+      search_model_with(:model => "Somemodel").should == "Somemodel"
     end
-    
     it "should guess models from controllers" do
-      mock_params = { :controller => "widgets"}
-      helper.stub!(:params).and_return(mock_params)
-      helper.search_model.should == "Widget"
+      search_model_with(:controller => "widgets").should == "Widget"
     end
   end
 
-  describe "provide the search type in English based on the controller" do
+  describe "#search_type" do
     it "should recognize the forums controller" do
-      mock_params = { :controller => "forums"}
-      helper.stub!(:params).and_return(mock_params)
-      helper.search_type.should == "Forums"
+      search_type_with(:controller => "forums").should == "Forums"
     end
     it "should recognize the ForumPost model" do
-      mock_params = { :model => "ForumPost"}
-      helper.stub!(:params).and_return(mock_params)
-      helper.search_type.should == "Forums"
+      search_type_with(:model => "ForumPost").should == "Forums"
     end
     it "should recognize the messages controller" do
-      mock_params = { :controller => "messages"}
-      helper.stub!(:params).and_return(mock_params)
-      helper.search_type.should == "Messages"
+      search_type_with(:controller => "messages").should == "Messages"
     end
     it "should recognize the Messages model" do
-      mock_params = { :model => "Message"}
-      helper.stub!(:params).and_return(mock_params)
-      helper.search_type.should == "Messages"
+      search_type_with(:model => "Message").should == "Messages"
+    end
+    it "should recognize the groups controller" do
+      search_type_with(:controller => "groups").should == "Groups"
+    end
+    it "should recognize the Group model" do
+      search_type_with(:model => "Group").should == "Groups"
+    end
+    it "should recognize the group action" do
+      search_type_with(:action => "groups").should == "Groups"
     end
     it "should recognize the People search by default" do
-      mock_params = {}
-      helper.stub!(:params).and_return(mock_params)
-      helper.search_type.should == "People"
+      search_type_with.should == "People"
     end
   end
 
@@ -94,4 +88,18 @@ describe SearchesHelper do
       end
     end
   end
+  
+  private
+  
+  def search_model_with(options={})
+    mock_params = {}.merge(options)
+    helper.stub!(:params).and_return(mock_params)
+    helper.search_model
+  end  
+  def search_type_with(options={})
+    mock_params = 
+      {:controller => "", :model => "", :action => ""}.merge(options)
+    helper.stub!(:params).and_return(mock_params)
+    helper.search_type
+  end  
 end

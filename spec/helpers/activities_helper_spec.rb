@@ -263,7 +263,7 @@ describe ActivitiesHelper do
       person.save
 
       activity = Activity.find_by_person_id(person)
-      minifeed_message(activity).should =~ /description changed/
+      minifeed_message(activity).should =~ /description has changed/
     end
 
     it "should have the right message for a new gallery" do

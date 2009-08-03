@@ -15,6 +15,7 @@
 #  primary      :boolean(1)      
 #  created_at   :datetime        
 #  updated_at   :datetime        
+#  group_id     :integer(4)      
 #  avatar       :boolean(1)      
 #  gallery_id   :integer(4)      
 #  title        :string(255)     
@@ -30,8 +31,9 @@ class Photo < ActiveRecord::Base
   attr_protected :id, :person_id, :parent_id, :created_at, :updated_at
   
   belongs_to :person
-  has_attachment :content_type => :image,
-                 :storage => :file_system,
+  belongs_to :group
+  has_attachment :content_type => :image, 
+                 :storage => :file_system, 
                  :max_size => UPLOAD_LIMIT.megabytes,
                  :min_size => 1,
                  :resize_to => '240>',

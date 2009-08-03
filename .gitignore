@@ -35,3 +35,7 @@ config/ultrasphinx/*.conf
 coverage/*
 .gitignore
 spec/rcov.opts
+spec/spec.opts
+spec/spec_report.html
+spec/spec_report.txt
+spec/spec_failing_examples.txt

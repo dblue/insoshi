@@ -85,10 +85,18 @@ module ActivitiesHelper
           #{topic_link(activity.item)})
       end
     when "Person"
+      %(#{person_link(person)}'s description has changed.)
       if recent
         %(description changed)
       else
         %(#{person_link_with_image(person)}'s description changed)
+      end
+    when "Group"
+      if recent
+        %(created the new group '#{group_link(Group.find(activity.item))}')
+      else
+        %(#{person_link(person)} created the new group 
+          '#{group_link(Group.find(activity.item))}')
       end
     when "Gallery"
       if recent
@@ -161,7 +169,9 @@ module ActivitiesHelper
       %(#{person_link(person)} created a 
         #{topic_link("new discussion topic", activity.item)})
     when "Person"
-      %(#{person_link(person)}'s description changed)
+      %(#{person_link(person)}'s description has changed.)
+    when "Group"
+      %(#{person_link(person)} created the new group '#{group_link(Group.find(activity.item))}')
     when "Gallery"
       %(#{person_link(person)} added a new gallery
         #{gallery_link(activity.item)})
@@ -206,6 +216,9 @@ module ActivitiesHelper
             when "Topic"
               "note.png"
             when "Person"
+                "user_edit.png"
+            when "Group"
+              "add.png"
                 "user_edit.png"
             when "Gallery"
               "photos.png"

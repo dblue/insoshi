@@ -93,6 +93,9 @@ class Person < ActiveRecord::Base
                                             :include => :person
 
   has_many :page_views, :order => 'created_at DESC'
+    
+  has_many :own_groups, :class_name => "Group", :foreign_key => "person_id"
+  has_and_belongs_to_many :groups, :order => "name DESC"
   has_many :galleries
   has_many :events
   has_many :event_attendees

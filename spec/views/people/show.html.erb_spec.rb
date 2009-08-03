@@ -12,6 +12,7 @@ describe "/people/show.html.erb" do
     assigns[:galleries] = @person.galleries.paginate(:page => 1)
     assigns[:some_contacts] = @person.some_contacts
     assigns[:common_contacts] = []
+    assigns[:groups] = []
     render "/people/show.html.erb"
   end
 

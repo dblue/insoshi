@@ -27,19 +27,20 @@ module ApplicationHelper
       #photos   = menu_element("Photos",   photos_path)
       #contacts = menu_element("Contacts",
       #                        person_connections_path(current_person))
+      groups = menu_element("Groups", groups_path())
       events   = menu_element("Events", events_path)
       #links = [home, profile, contacts, messages, blog, people, forum]
       links = [home, profile, messages, people, forum]
       # TODO: put this in once events are ready.
-      # links.push(events)
-      
+      # links.push(events)      
     elsif logged_in? and admin_view?
       home =    menu_element("Home", home_path)
       people =  menu_element("People", admin_people_path)
       forums =  menu_element(inflect("Forum", Forum.count),
                              admin_forums_path)
       preferences = menu_element("Prefs", admin_preferences_path)
-      links = [home, people, forums, preferences]
+      groups = menu_element("Groups", admin_groups_path)
+      links = [home, people, groups, forums, preferences]
     else
       links = [home, people]
     end

@@ -19,7 +19,7 @@
 class Event < ActiveRecord::Base
   include ActivityLogger
 
-  attr_accessible :title, :description
+  attr_accessible :title, :description, :start_time, :end_time, :reminder
 
   MAX_DESCRIPTION_LENGTH = MAX_STRING_LENGTH
   MAX_TITLE_LENGTH = 40

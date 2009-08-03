@@ -25,7 +25,10 @@ class PeopleController < ApplicationController
       @some_contacts = @person.some_contacts
       page = params[:page]
       @common_contacts = current_person.common_contacts_with(@person,
-                                                             :page => page)
+                                                             :page => 
+                                                                params[:page])
+      @groups = @person.groups
+      @own_groups = @person.own_groups
       # Use the same max number as in basic contacts list.
       num_contacts = Person::MAX_DEFAULT_CONTACTS
       @some_common_contacts = @common_contacts[0...num_contacts]
@@ -146,6 +149,21 @@ class PeopleController < ApplicationController
     respond_to do |format|
       format.html
     end
+  end
+  
+  def groups
+    @person = Person.find(params[:id])
+    @groups = @person.groups
+    
+    respond_to do |format|
+      format.html
+    end
+  end
+  
+  def admin_groups
+    @person = Person.find(params[:id])
+    @groups = @person.own_groups
+    render :action => :groups
   end
   
   private
