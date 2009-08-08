@@ -155,18 +155,28 @@ describe ApplicationHelper do
     # NOTE: RDiscount and BlueCloth both define Markdown.
     # We should choose one (or the other) as a required gem, but
     # not check each time for both.
-  
-    xit "should format text using RDiscount if available"
-    xit "should format text using BlueCloth if available"
-  
-    it "should add a paragraph tag if needed and if there is no Markdown" do
-      helper.display("My sample text").should == "<p>My sample text</p>"
+    before(:all) do
+      old_Markdown = Markdown if defined?(Markdown)
+    end
+    
+    it "should format text using Markdown if available" do
+      helper.should_receive(:markdown?).and_return(true)
+      helper.display("My **sample** text").should == "<p>My <strong>sample</strong> text</p>"
     end
     
     it "should use plain text if there is no Markdown" do
-      helper.display("<p>My sample text</p>").should == "<p>My sample text</p>"
+      helper.should_receive(:markdown?).and_return(false)
+      helper.display("<p>My **sample** text</p>").should == "<p>My **sample** text</p>"
     end
-    
+  
+    it "should add a paragraph tag if needed and if there is no Markdown" do
+      helper.should_receive(:markdown?).and_return(false)
+      helper.display("My **sample** text").should == "<p>My **sample** text</p>"
+    end
+            
+    after(:all) do
+      Markdown = old_Markdown if defined?(old_Markdown)
+    end
   end
 
   describe "#email_link" do

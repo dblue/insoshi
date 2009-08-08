@@ -167,13 +167,15 @@ module ApplicationHelper
     end
     
     # Format text using BlueCloth (or RDiscount) if available.
+    # NOTE: Both BlueCloth and RDiscount libraries set the top-
+    # level Markdown constant in their implementation classes,
+    # making it possible to write code that expresses no interest
+    # in Markdown implementation.
     def format(text)
       if text.nil?
         ""
-      elsif defined?(RDiscount)
-        RDiscount.new(text).to_html
-      elsif defined?(BlueCloth)
-        BlueCloth.new(text).to_html
+      elsif markdown?
+        Markdown.new(text).to_html
       elsif no_paragraph_tag?(text)
         content_tag :p, text
       else
@@ -183,7 +185,7 @@ module ApplicationHelper
     
     # Is a Markdown library present?
     def markdown?
-      defined?(RDiscount) or defined?(BlueCloth)
+      defined?(Markdown)
     end
     
     # Return true if the text *doesn't* start with a paragraph tag.
