@@ -24,6 +24,7 @@ describe PasswordRemindersController do
   
   it "should fail if it cannot find a valid person" do
     Person.stub!(:find_by_email).and_return(nil)
+    @controller.instance_eval{flash.stub!(:sweep)} # don't sweep flash.now
     post :create, :person => { :email => 'not_found' }
     response.should render_template(:new)
     flash.now[:error].should == "Invalid email address"

@@ -38,10 +38,11 @@ describe SessionsController do
     
     it "should redirect deactivated users" do
       @person.toggle!(:deactivated)
+      @controller.instance_eval{flash.stub!(:sweep)} # don't sweep flash.now      
       post :create, :email => @person.email,
                     :password => @person.unencrypted_password
       response.should redirect_to(home_url)
-      flash[:error].should =~ /deactivated/
+      flash.now[:error].should =~ /deactivated/
     end
     
     it 'logs out when the user is deactivated' do
@@ -125,7 +126,7 @@ describe SessionsController do
     it 'deletes token on logout' do
       login_as @person
       get :destroy
-      response.cookies["auth_token"].should == []
+      response.cookies["auth_token"].should == nil
     end
 
     it 'logs in with cookie' do
