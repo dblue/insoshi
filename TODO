@@ -25,3 +25,21 @@ app/models/person.rb:
 app/views/messages/_message_nav.html.erb:
   * [  5] be able to select people on the messages page
 
+GROUPS: 
+  * Activity for last 7 days:
+		- New Members
+		- New discussions
+		- New articles / events
+	* Groups have:
+		- Logo
+		- Group name
+		- Group type
+		- Summary
+		- Description / homepage?
+		- website
+		- group owner email
+		- access:
+			+ Open access
+			+ Request to Join
+		- Hidden (Display in Directory)
+		- Group owner, group managers
