@@ -23,16 +23,13 @@ module ApplicationHelper
     if logged_in? and not admin_view?
       profile  = menu_element("Profile",  person_path(current_person))
       messages = menu_element("Messages", messages_path)
-      #blog     = menu_element("Blog",     blog_path(current_person.blog))
-      #photos   = menu_element("Photos",   photos_path)
-      #contacts = menu_element("Contacts",
-      #                        person_connections_path(current_person))
+      blog     = menu_element("Blog",     blog_path(current_person.blog))
+      photos   = menu_element("Photos",   photos_path)
+      contacts = menu_element("Contacts",
+                              person_connections_path(current_person))
       groups = menu_element("Groups", groups_path())
       events   = menu_element("Events", events_path)
-      #links = [home, profile, contacts, messages, blog, people, forum]
-      links = [home, profile, messages, people, forum]
-      # TODO: put this in once events are ready.
-      # links.push(events)      
+      links = [home, profile, contacts, messages, blog, people, forum, events, groups]
     elsif logged_in? and admin_view?
       home =    menu_element("Home", home_path)
       people =  menu_element("People", admin_people_path)

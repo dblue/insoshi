@@ -7,13 +7,15 @@ ActionController::Routing::Routes.draw do |map|
                  :new_photo => :post,
                  :save_photo => :post,
                  :delete_photo => :delete
-                 }
+               }
+               
   map.resources :categories
   map.resources :links
   map.resources :events, :member => { :attend => :get, 
                                       :unattend => :get } do |event|
     event.resources :comments
   end
+  
   map.resources :preferences
   map.resources :searches
   map.resources :activities
