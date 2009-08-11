@@ -1,0 +1,27 @@
+OVERALL:
+  * Check flash/flash.now issues
+
+app/helpers/activities_helper.rb:
+  * [ 50] make recent/long versions for this
+  * [228] replace with a png icon
+  * [231] replace with a png icon
+
+app/helpers/application_helper.rb:
+  * [ 34] put this in once events are ready.
+
+app/helpers/people_helper.rb:
+  * [  3] Not used
+  * [ 46] Fix and merge into person_link
+  * [ 60] Not used.
+  * [ 71] Not used.
+
+app/models/comment.rb:
+  * [ 66] Not yet implemented (requires migration)
+  * [ 71] Not used.
+
+app/models/person.rb:
+  * [199] Remove (not used)
+
+app/views/messages/_message_nav.html.erb:
+  * [  5] be able to select people on the messages page
+
