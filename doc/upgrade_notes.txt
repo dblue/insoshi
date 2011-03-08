@@ -1,0 +1,18 @@
+Plugins:
+g -- acts_as_list
+g -- annotate_models
+x -- attachment_fu --> replace with dragonfly
+u -- calendar_date_select --> https://github.com/railssignals/jquery_calendar_date_select
+u -- calendar_helper
+x -- catch_cookie_exception
+u -- find_mass_assignment
+u -- footnotes-edge --> https://github.com/josevalim/rails-footnotes
+x -- gemsonrails
+u -- in_place_editing --> https://github.com/flvorful/super_inplace_controls
+g -- jquery-ui-rails-helpers
+u -- jrails
+u -- query_analyzer
+x -- restful_authentication
+x -- ultrasphinx (for now)
+g -- uuid-1.0.4
+g -- will_paginate
