@@ -5,7 +5,7 @@
 # ENV['RAILS_ENV'] ||= 'production'
 
 # Specifies gem version of Rails to use when vendor/rails is not present
-RAILS_GEM_VERSION = '2.2.2' unless defined? RAILS_GEM_VERSION
+RAILS_GEM_VERSION = '2.3.8' unless defined? RAILS_GEM_VERSION
 
 # Bootstrap the Rails environment, frameworks, and default configuration
 require File.join(File.dirname(__FILE__), 'boot')
@@ -28,9 +28,9 @@ Rails::Initializer.run do |config|
 
   # Add additional load paths for your own custom dirs
   config.load_paths += %W( #{RAILS_ROOT}/app/sweepers )
-  config.load_paths += Dir["#{RAILS_ROOT}/vendor/gems/**"].map do |dir| 
-    File.directory?(lib = "#{dir}/lib") ? lib : dir
-  end
+  # config.load_paths += Dir["#{RAILS_ROOT}/vendor/gems/**"].map do |dir| 
+  #   File.directory?(lib = "#{dir}/lib") ? lib : dir
+  # end
 
 
   # Force all environments to use the same logger level
@@ -75,9 +75,10 @@ Rails::Initializer.run do |config|
   #                                    :source => 'http://gems.github.com'
   config.gem 'chronic'
   config.gem 'BlueCloth', :lib => 'bluecloth'
+  # config.gem 'jquery-ui-rails-helpers'
 end
 
-require 'vendor/plugins/jquery_ui_rails_helpers/helpers/tabs_renderer'
+# require 'vendor/plugins/jquery-ui-rails-helpers/lib/helpers/tabs_helper'
 
 # Set INLINEDIR to override default location for ruby_inline directory
 # The home directory may not be correctly set in an "su"/"sudo" situation

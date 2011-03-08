@@ -7,6 +7,10 @@ class SessionsController < ApplicationController
     @body = "login single-col"
   end
 
+  def using_open_id?
+    false
+  end
+  
   def create
     if using_open_id?
       open_id_authentication(params[:openid_url])
