@@ -9,7 +9,7 @@
     <%= display @preview %>
   <%- end -%>
   
-  <% form_for(:message,
+  <%= form_for(:message,
               :url => person_messages_path(@recipient)) do |f| %>
     <div class="form_row full">
       <label for="recipient">To</label>

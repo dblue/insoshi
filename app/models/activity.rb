@@ -27,13 +27,17 @@ class Activity < ActiveRecord::Base
   # This is especially useful for sites that require email verifications.
   # Their 'connected with admin' item won't show up until they verify.
   def self.global_feed
-    find(:all, 
-         :joins => "INNER JOIN people p ON activities.person_id = p.id",
-         :conditions => [%(p.deactivated = ? AND
-                           (p.email_verified IS NULL OR 
-                            p.email_verified = ?)), 
-                         false, true], 
-         :order => 'activities.created_at DESC',
-         :limit => GLOBAL_FEED_SIZE)
+    # find(:all, 
+    #      :joins => "INNER JOIN people p ON activities.person_id = p.id",
+    #      :conditions => [%(p.deactivated = ? AND
+    #                        (p.email_verified IS NULL OR 
+    #                         p.email_verified = ?)), 
+    #                      false, true], 
+    #      :order => 'activities.created_at DESC',
+    #      :limit => GLOBAL_FEED_SIZE)
+    Activity.joins('INNER JOIN people p ON activities.person_id = p.id') \
+      .where("p.deactivated = ? AND (p.email_verified IS NULL OR p.email_verified = ?))", false, true) \
+      .order("activities.created_at DESC") \
+      .limit(GLOBAL_FEED_SIZE) \
   end
 end

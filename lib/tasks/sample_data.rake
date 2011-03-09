@@ -70,7 +70,7 @@ end
 
 def make_connections
   person = default_person
-  people = Person.find(:all) - [person]
+  people = Person..all - [person]
   people.shuffle[0..20].each do |contact|
     Connection.request(contact, person, send_mail = false)
     sometimes(0.5) { Connection.accept(person, contact) }

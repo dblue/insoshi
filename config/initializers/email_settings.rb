@@ -1,6 +1,6 @@
 begin
   unless test?
-    global_prefs = Preference.find(:first)
+    global_prefs = Preference.first
     if global_prefs.email_notifications?
       ActionMailer::Base.delivery_method = :smtp
       ActionMailer::Base.smtp_settings = {

@@ -3,7 +3,7 @@
 
   <%= error_messages_for :preferences %>
 
-  <% form_for :preferences,
+  <%= form_for :preferences,
               :url => admin_preference_path(@preferences),
               :html => { :method => :put, :id => 'admin_preferences' } do |f| %>
               

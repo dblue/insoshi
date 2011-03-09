@@ -13,7 +13,7 @@ class PasswordRemindersController < ApplicationController
           flash.now[:error] = "Invalid email address"
           render :action => "new"
         else
-          PersonMailer.deliver_password_reminder(person)
+          PersonMailer.password_reminder(person).deliver
           flash[:success] = "Your password has been sent"
           redirect_to login_url
         end

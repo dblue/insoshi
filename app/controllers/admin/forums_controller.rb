@@ -5,7 +5,7 @@ class Admin::ForumsController < ApplicationController
   
 
   def index
-    @forums = Forum.find(:all)
+    @forums = Forum..all
     respond_to do |format|
       format.html
     end

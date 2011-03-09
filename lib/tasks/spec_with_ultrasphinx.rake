@@ -29,15 +29,15 @@ task :spec_with_ultrasphinx do
     else;                                   'ps aux' end
     unless ENV['SPHINX'] == 'false'
       puts 'Testing with ultrasphinx...'
-      environments = Dir.glob "#{RAILS_ROOT}/config/environments/*.rb"
+      environments = Dir.glob "#{Rails.root}/config/environments/*.rb"
       environments.map! { |path| path.split('/').last.split('.').first }
       `#{processes}` =~ /searchd.*(#{environments.join('|')})/
       ultrasphinx_conf = $1
       if !['test', nil].include? ultrasphinx_conf or ENV['INDEX'] == 'true'
         puts "Stopping #{ultrasphinx_conf} daemon..."
-        puts `rake ultrasphinx:daemon:stop RAILS_ENV=#{ultrasphinx_conf}`
+        puts `rake ultrasphinx:daemon:stop Rails.env=#{ultrasphinx_conf}`
       end
-      unless File.exist? "#{RAILS_ROOT}/config/ultrasphinx/test.conf"
+      unless File.exist? "#{Rails.root}/config/ultrasphinx/test.conf"
         puts 'Bootstrapping test environment...'
         puts `rake ultrasphinx:bootstrap RAILS_ENV=test`
       end

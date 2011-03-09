@@ -142,19 +142,17 @@ class Person < ActiveRecord::Base
     
     # Return *all* the active users.
     def all_active
-      find(:all, :conditions => conditions_for_active)
+      self.where(conditions_for_active)
     end
     
     def find_recent
-      find(:all, :order => "people.created_at DESC",
-                 :include => :photos, :limit => NUM_RECENT)
+      self.order('created_at DESC').limit(NUM_RECENT).includes(:photos)
     end
 
     # Return the first admin created.
     # We suggest using this admin as the primary administrative contact.
     def find_first_admin
-      find(:first, :conditions => ["admin = ?", true],
-                   :order => :created_at)
+      self.where( :admin => true ).order(:created_at).first
     end
   end
 
@@ -293,7 +291,7 @@ class Person < ActiveRecord::Base
   end
 
   def self.encrypt(password)
-    Crypto::Key.from_file("#{RAILS_ROOT}/rsa_key.pub").encrypt(password)
+    Crypto::Key.from_file("#{Rails.root}/rsa_key.pub").encrypt(password)
   end
 
   # Encrypts the password with the user salt
@@ -302,7 +300,7 @@ class Person < ActiveRecord::Base
   end
 
   def decrypt(password)
-    Crypto::Key.from_file("#{RAILS_ROOT}/rsa_key").decrypt(password)
+    Crypto::Key.from_file("#{Rails.root}/rsa_key").decrypt(password)
   end
 
   def authenticated?(password)
@@ -421,11 +419,11 @@ class Person < ActiveRecord::Base
     
     # Clear out all activities associated with this person.
     def destroy_activities
-      Activity.find_all_by_person_id(self).each {|a| a.destroy}
+      self.activities.all.each {|a| a.destroy}
     end
     
     def destroy_feeds
-      Feed.find_all_by_person_id(self).each {|f| f.destroy}
+      self.feeds.all.each {|f| f.destroy}
     end
 
     # Connect new users to "Tom".

@@ -53,7 +53,7 @@ class ApplicationController < ActionController::Base
         f.write UUID.new
       end unless File.exist?("identifier")
       @tracker_id = File.open("identifier").read rescue nil
-      @env = ENV['RAILS_ENV']
+      @env = Rails.env
     end
     
     # Warn the admin if his email address or password is still the default.

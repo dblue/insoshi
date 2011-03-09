@@ -2,7 +2,7 @@
 
 <%= error_messages_for :topic %>
 
-<% form_for :topic, :url => forum_topic_path(@forum, @topic),
+<%= form_for :topic, :url => forum_topic_path(@forum, @topic),
             :html => { :method => :put} do |f| %>
 
   <div class="prefItem">

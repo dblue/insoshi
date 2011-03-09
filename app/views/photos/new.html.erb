@@ -2,7 +2,7 @@
 <%= error_messages_for :photo %>
 
 <h3>Select New Image</h3>
-<% form_for @photo,:url=>{:controller => :photos, :action => :create, :gallery_id => @gallery}, :html => { :multipart => true } do |f| -%>
+<%= form_for @photo,:url=>{:controller => :photos, :action => :create, :gallery_id => @gallery}, :html => { :multipart => true } do |f| -%>
 
   <div class="form_field">
     <%= f.file_field :uploaded_data %>

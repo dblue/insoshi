@@ -9,7 +9,7 @@
   <%- if logged_in? -%>
       <h2>New Topic</h2>
   
-      <% form_for :topic, :url => forum_topics_path(@forum) do |f| %>
+      <%= form_for :topic, :url => forum_topics_path(@forum) do |f| %>
         <div class="form_row">
           <%= f.label :name, "Subject" %>
           <%= f.text_field :name %>

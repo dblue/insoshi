@@ -34,7 +34,7 @@
   <%- if logged_in? -%>
     <h4>Leave a comment</h4>
 
-    <% form_for :comment, :url => event_comments_path(@event),
+    <%= form_for :comment, :url => event_comments_path(@event),
                           :html => { :id => "eventcomment" } do |f| %>
       <div class="form_row">
         <%= f.text_area :body, :rows => 10 %>

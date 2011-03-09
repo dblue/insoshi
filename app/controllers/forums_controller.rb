@@ -3,7 +3,7 @@ class ForumsController < ApplicationController
   before_filter :login_required, :setup
 
   def index
-    @forums = Forum.find(:all)
+    @forums = Forum..all
     if @forums.length == 1
       redirect_to forum_url(@forums.first) and return
     end

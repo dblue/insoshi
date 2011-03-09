@@ -63,7 +63,7 @@ class Connection < ActiveRecord::Base
           # The order here is important: the mail is sent *to* the contact,
           # so the connection should be from the contact's point of view.
           connection = conn(contact, person)
-          PersonMailer.deliver_connection_request(connection)
+          PersonMailer.connection_request(connection).deliver
         end
         true
       end

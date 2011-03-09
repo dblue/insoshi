@@ -28,7 +28,7 @@ class Admin::PreferencesController < ApplicationController
           # We have to mark all the email addresses as verified for the
           # require_activation before filter to work.
           Person.transaction do
-            Person.find(:all).each do |person|
+            Person.all.each do |person|
               person.email_verified = true
               person.save
             end
@@ -48,7 +48,7 @@ class Admin::PreferencesController < ApplicationController
   private
     
     def setup
-      @preferences = Preference.find(:first)
+      @preferences = Preference.first
     end
     
     # The server needs to be restarted if the email settings change.

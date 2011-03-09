@@ -3,7 +3,7 @@
 
 <%= error_messages_for :forum %>
 
-<% form_for :forum,
+<%= form_for :forum,
             :url => admin_forum_path(@forum),
             :html => { :method => :put, :id => 'admin_forums' } do |f| %>
   <div class="form_row">

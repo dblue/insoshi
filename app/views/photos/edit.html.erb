@@ -4,7 +4,7 @@
 
   <p><%= image_tag(@display_photo.public_filename(:thumbnail)) %></p>
 
-  <% form_for @photo do |f| -%>
+  <%= form_for @photo do |f| -%>
     <div class="form_field">
     <%= f.label :title %>
       <%= f.text_field :title %>
