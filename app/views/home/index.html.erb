@@ -1,5 +1,5 @@
-<%- column_div :type => :primary do -%>
-  <%- if logged_in? and current_person.has_unread_messages? -%>
+<%= column_div :type => :primary do -%>
+  <%- if person_signed_in? and current_person.has_unread_messages? -%>
     <div class="notice">
       You have unread messages in your mailbox.
       <%= link_to "Click here to see your messages",
@@ -9,9 +9,9 @@
   <%= render :partial => 'feed' %>
 <%- end -%>
 
-<%- column_div :type => :secondary do -%>
+<%= column_div :type => :secondary do -%>
   <%= render :partial => "searches/box" %>
-  <%- if logged_in? -%>
+  <%- if person_signed_in? -%>
     <%= render :partial => 'requested_contacts' %>
     <%= render :partial => 'messages_preview' %>
     <%= render :partial => 'shared/contacts_preview',
@@ -31,7 +31,7 @@
     </h2>
     
     <div style="text-align: center;">
-      <%= link_to image_tag("button_signup.png"), signup_path %>
+      <%= link_to image_tag("button_signup.png"), new_person_registration_path %>
     </div>
       
   <%- end -%>

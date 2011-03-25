@@ -9,15 +9,6 @@ class PersonMailer < ActionMailer::Base
     @server_name ||= PersonMailer.global_prefs.server_name
   end
   
-  def password_reminder(person)
-    @person = person
-    mail(
-      :from => "Password reminder <password-reminder@#{domain}>",
-      :to => person.email, 
-      :subject => formatted_subject("Password reminder")
-    )
-  end
-  
   def message_notification(message)
     @server = server
     @message = message
@@ -64,17 +55,7 @@ class PersonMailer < ActionMailer::Base
       :subject => formatted_subject("New wall comment")
     )
   end
-  
-  def email_verification(ev)
-    @server = server
-    @code = ev.code
-    mail(
-      :from => "Email verification <email@#{domain}>",
-      :to => ev.person.email,
-      :subject => formatted_subject("Email verification")
-    )
-  end
-  
+    
   private
   
     # Prepend the application name to subjects if present in preferences.

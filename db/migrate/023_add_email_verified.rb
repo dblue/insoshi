@@ -8,7 +8,7 @@ class AddEmailVerified < ActiveRecord::Migration
     if Preference.find(:first).email_verifications?
       # This is to modify the database for the splitting between
       # 'deactivated' and 'email_verified'.
-      Person..all.each do |person|
+      Person.all.each do |person|
         person.email_verified = !person.deactivated?
         person.save
       end

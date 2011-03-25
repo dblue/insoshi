@@ -8,7 +8,7 @@ describe ActivitiesHelper do
     @current_person = login_as(:aaron)
     @gallery = galleries(:aarons_gallery)
     # It sucks that RSpec makes me do this.
-    self.stub!(:logged_in?).and_return(true)
+    self.stub!(:person_signed_in?).and_return(true)
     self.stub!(:current_person).and_return(people(:aaron))
   end
   

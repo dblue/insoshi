@@ -11,7 +11,7 @@
 #  description                :text            
 #  remember_token_expires_at  :datetime        
 #  last_contacted_at          :datetime        
-#  last_logged_in_at          :datetime        
+#  last_sign_in_at          :datetime        
 #  forum_posts_count          :integer(4)      default(0), not null
 #  blog_post_comments_count   :integer(4)      default(0), not null
 #  wall_comments_count        :integer(4)      default(0), not null

@@ -20,7 +20,7 @@ module ApplicationHelper
     end
     resources = menu_element("Resources", "http://docs.insoshi.com/")
 
-    if logged_in? and not admin_view?
+    if person_signed_in? and not admin_view?
       profile  = menu_element("Profile",  person_path(current_person))
       messages = menu_element("Messages", messages_path)
       #blog     = menu_element("Blog",     blog_path(current_person.blog))
@@ -33,7 +33,7 @@ module ApplicationHelper
       # TODO: put this in once events are ready.
       # links.push(events)
       
-    elsif logged_in? and admin_view?
+    elsif person_signed_in? and admin_view?
       home =    menu_element("Home", home_path)
       people =  menu_element("People", admin_people_path)
       forums =  menu_element(inflect("Forum", Forum.count),
@@ -66,8 +66,8 @@ module ApplicationHelper
   
   def login_block
     forgot = global_prefs.can_send_email? ? '<br />' + link_to('I forgot my password', new_password_reminder_path) : ''
-    content_tag(:span, link_to("Sign in", login_path) + ' or ' +
-                       link_to("Sign up", signup_path) + 
+    content_tag(:span, link_to("Sign in", new_person_session_path) + ' or ' +
+                       link_to("Sign up", new_person_registration_path) + 
                        forgot)
   end
 
@@ -77,7 +77,7 @@ module ApplicationHelper
   end
   
   def admin?
-    logged_in? and current_person.admin?
+    person_signed_in? and current_person.admin?
   end
   
   # Set the input focus for a specific id
@@ -116,7 +116,7 @@ module ApplicationHelper
     klass = options.delete(:type) == :primary ? "col1" : "col2"
     # Allow callers to pass in additional classes.
     options[:class] = "#{klass} #{options[:class]}".strip
-    concat(content_tag(:div, capture(&block), options))
+    content_tag(:div, capture(&block), options)
   end
 
   def email_link(person, options = {})

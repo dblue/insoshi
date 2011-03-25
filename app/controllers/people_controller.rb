@@ -21,7 +21,7 @@ class PeopleController < ApplicationController
       flash[:error] = "That person is not active"
       redirect_to home_url and return
     end
-    if logged_in?
+    if person_signed_in?
       @some_contacts = @person.some_contacts
       page = params[:page]
       @common_contacts = current_person.common_contacts_with(@person,

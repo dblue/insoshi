@@ -59,7 +59,7 @@ end
 
 def make_demo_connections
   person = default_demo_person
-  people = Person..all - [person]
+  people = Person.all - [person]
   people.each do |contact|
     Connection.connect(contact, person, send_mail = false)
   end
@@ -67,7 +67,7 @@ end
 
 def make_demo_activities
   person = default_demo_person
-  people = Person..all - [person]
+  people = Person.all - [person]
   Message.create(:subject => "The message subject",
                  :content => "The message content.",
                  :sender => people.rand,

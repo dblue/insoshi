@@ -36,7 +36,7 @@ class Activity < ActiveRecord::Base
     #      :order => 'activities.created_at DESC',
     #      :limit => GLOBAL_FEED_SIZE)
     Activity.joins('INNER JOIN people p ON activities.person_id = p.id') \
-      .where("p.deactivated = ? AND (p.email_verified IS NULL OR p.email_verified = ?))", false, true) \
+      .where("p.deactivated = ? AND (p.email_verified IS NULL OR p.email_verified = ?)", false, true) \
       .order("activities.created_at DESC") \
       .limit(GLOBAL_FEED_SIZE) \
   end

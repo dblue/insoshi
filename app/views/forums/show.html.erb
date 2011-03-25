@@ -6,7 +6,7 @@
   </ol>
   <%= will_paginate(@topics) %>
 
-  <%- if logged_in? -%>
+  <%- if person_signed_in? -%>
       <h2>New Topic</h2>
   
       <%= form_for :topic, :url => forum_topics_path(@forum) do |f| %>

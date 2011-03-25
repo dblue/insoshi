@@ -141,7 +141,7 @@ describe PeopleController do
         
         it "should not log the person in" do
           person = create_person
-          controller.send(:logged_in?).should be_false
+          controller.send(:person_signed_in?).should be_false
         end
           
         it "should not have an auth token" do

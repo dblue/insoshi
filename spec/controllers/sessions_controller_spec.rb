@@ -19,10 +19,10 @@ describe SessionsController do
     response.should be_redirect
   end
   
-  it "should update person's last_logged_in_at attribute" do
-    last_logged_in_at = @person.last_logged_in_at
+  it "should update person's last_sign_in_at attribute" do
+    last_sign_in_at = @person.last_sign_in_at
     post :create, :email => @person.email, :password => 'test'
-    @person.reload.last_logged_in_at.should_not == last_logged_in_at
+    @person.reload.last_sign_in_at.should_not == last_sign_in_at
   end
   
   it 'fails login and does not redirect' do
@@ -60,7 +60,7 @@ describe SessionsController do
     @person.remember_me
     request.cookies["auth_token"] = cookie_for(:quentin)
     get :new
-    controller.send(:logged_in?).should be_true
+    controller.send(:person_signed_in?).should be_true
   end
   
   it 'fails expired cookie login' do
@@ -68,14 +68,14 @@ describe SessionsController do
     @person.update_attribute :remember_token_expires_at, 5.minutes.ago
     request.cookies["auth_token"] = cookie_for(:quentin)
     get :new
-    controller.send(:logged_in?).should_not be_true
+    controller.send(:person_signed_in?).should_not be_true
   end
   
   it 'fails cookie login' do
     @person.remember_me
     request.cookies["auth_token"] = auth_token('invalid_auth_token')
     get :new
-    controller.send(:logged_in?).should_not be_true
+    controller.send(:person_signed_in?).should_not be_true
   end
   
   it "should redirect deactivated users" do

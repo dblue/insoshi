@@ -11,7 +11,7 @@
 #  description                :text            
 #  remember_token_expires_at  :datetime        
 #  last_contacted_at          :datetime        
-#  last_logged_in_at          :datetime        
+#  last_sign_in_at          :datetime        
 #  forum_posts_count          :integer(4)      default(0), not null
 #  blog_post_comments_count   :integer(4)      default(0), not null
 #  wall_comments_count        :integer(4)      default(0), not null
@@ -32,21 +32,25 @@ class Person < ActiveRecord::Base
   include ActivityLogger
   extend PreferencesHelper
 
-  attr_accessor :password, :verify_password, :new_password,
-                :sorted_photos
-  attr_accessible :email, :password, :password_confirmation, :name,
-                  :description, :connection_notifications,
+  # Include default devise modules. Others available are:
+  # :token_authenticatable, :confirmable, :lockable and :timeoutable
+  devise :database_authenticatable, :registerable,
+         :recoverable, :rememberable, :trackable, :validatable
+
+  # Setup accessible (or protected) attributes for your model
+  attr_accessible :email, :password, :password_confirmation, :remember_me,
+                  :name, :description, :connection_notifications,
                   :message_notifications, :wall_comment_notifications,
-                  :blog_comment_notifications, :identity_url
+                  :blog_comment_notifications
+                  
+  attr_accessor :sorted_photos
+
   # Indexed fields for Sphinx
   #is_indexed :fields => [ 'name', 'description', 'deactivated',
   #                        'email_verified'],
   #           :conditions => "deactivated = false AND (email_verified IS NULL OR email_verified = true)"
   define_index do
-    indexes name
-    indexes description
-    indexes deactivated
-    indexes email_verified  
+    indexes name, description, deactivated, email_verified
     where "deactivated = false AND (email_verified IS NULL or email_verified = true)"
   end
   MAX_EMAIL = MAX_PASSWORD = 40
@@ -121,7 +125,6 @@ class Person < ActiveRecord::Base
   validates_uniqueness_of   :identity_url, :allow_nil => true
 
   before_create :create_blog, :check_config_for_deactivation
-  before_save :encrypt_password
   before_validation :prepare_email, :handle_nil_description
   after_create :connect_to_admin
 
@@ -288,80 +291,6 @@ class Person < ActiveRecord::Base
     @sorted_photos ||= photos.partition(&:primary).flatten
   end
 
-  ## Authentication methods
-
-  # Authenticates a user by their email address and unencrypted password.
-  # Returns the user or nil.
-  def self.authenticate(email, password)
-    u = find_by_email_and_identity_url(email.downcase.strip, nil) # need to get the salt
-    u && u.authenticated?(password) ? u : nil
-  end
-
-  def self.encrypt(password)
-    Crypto::Key.from_file("#{Rails.root}/rsa_key.pub").encrypt(password)
-  end
-
-  # Encrypts the password with the user salt
-  def encrypt(password)
-    self.class.encrypt(password)
-  end
-
-  def decrypt(password)
-    Crypto::Key.from_file("#{Rails.root}/rsa_key").decrypt(password)
-  end
-
-  def authenticated?(password)
-    unencrypted_password == password
-  end
-
-  def unencrypted_password
-    # The gsub trickery is to unescape the key from the DB.
-    decrypt(crypted_password)#.gsub(/\\n/, "\n")
-  end
-
-  def remember_token?
-    remember_token_expires_at && Time.now.utc < remember_token_expires_at
-  end
-
-  # These create and unset the fields required for remembering users
-  # between browser closes
-  def remember_me
-    remember_me_for 2.years
-  end
-
-  def remember_me_for(time)
-    remember_me_until time.from_now.utc
-  end
-
-  def remember_me_until(time)
-    self.remember_token_expires_at = time
-    key = "#{email}--#{remember_token_expires_at}"
-    self.remember_token = Digest::SHA1.hexdigest(key)
-    save(false)
-  end
-
-  def forget_me
-    self.remember_token_expires_at = nil
-    self.remember_token            = nil
-    save(false)
-  end
-
-
-  def change_password?(passwords)
-    self.password_confirmation = passwords[:password_confirmation]
-    self.verify_password = passwords[:verify_password]
-    unless verify_password == unencrypted_password
-      errors.add(:password, "is incorrect")
-      return false
-    end
-    unless passwords[:new_password] == password_confirmation
-      errors.add(:password, "does not match confirmation")
-      return false
-    end
-    self.password = passwords[:new_password]
-    save
-  end
-
   # Return true if the person is the last remaining active admin.
   def last_admin?
     num_admins = Person.count(:conditions => ["admin = ? AND deactivated = ?",
@@ -403,11 +332,6 @@ class Person < ActiveRecord::Base
       self.description = "" if description.nil?
     end
 
-    def encrypt_password
-      return if password.blank?
-      self.crypted_password = encrypt(password)
-    end
-
     def check_config_for_deactivation
       if Person.global_prefs.whitelist?
         self.deactivated = true
@@ -446,7 +370,7 @@ class Person < ActiveRecord::Base
     ## Other private method(s)
 
     def password_required?
-      (crypted_password.blank? && identity_url.nil?) || !password.blank? ||
+      (encrypted_password.blank? && identity_url.nil?) || !password.blank? ||
       !verify_password.nil?
     end
     
@@ -463,8 +387,8 @@ class Person < ActiveRecord::Base
       def conditions_for_mostly_active
         [%(deactivated = ? AND 
            (email_verified IS NULL OR email_verified = ?) AND
-           (last_logged_in_at IS NOT NULL AND
-            last_logged_in_at >= ?)),
+           (last_sign_in_at IS NOT NULL AND
+            last_sign_in_at >= ?)),
          false, true, TIME_AGO_FOR_MOSTLY_ACTIVE]
       end
     end

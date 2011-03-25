@@ -9,7 +9,6 @@ Insoshi::Application.routes.draw do
   resources :searches
   resources :activities
   resources :connections
-  resources :password_reminders
   resources :photos do
   
     member do
@@ -18,8 +17,6 @@ Insoshi::Application.routes.draw do
     end
   end
 
-  # match 'session' => 'sessions#create', :as => :open_id_complete, :constraints => { :method => get }
-  resource :session
   resource :galleries
   resources :messages do
     collection do
@@ -32,19 +29,15 @@ Insoshi::Application.routes.draw do
     end
   end
 
-  resources :people do
-    member do
-      get :verify_email
-      get :common_contacts
-    end
-  end
-
-  match 'people/verify/:id' => 'people#verify_email'
+  devise_for :people
   resources :people do
     resources :messages
     resources :galleries
     resources :connections
     resources :comments
+    member do
+      get :common_contacts
+    end
   end
 
   resources :galleries do
@@ -73,9 +66,6 @@ Insoshi::Application.routes.draw do
     end
   end
 
-  match '/signup' => 'people#new', :as => :signup
-  match '/login' => 'sessions#new', :as => :login
-  match '/logout' => 'sessions#destroy', :as => :logout
   match '/' => 'home#index', :as => :home
   match '/about' => 'home#about', :as => :about
   match '/admin/home' => 'home#index', :as => :admin_home

@@ -28,19 +28,19 @@ class ApplicationController < ActionController::Base
     # See http://www.scribd.com/doc/49575/Scaling-Rails-Presentation
     def create_page_view
       PageView.create(:person_id => session[:person_id],
-                      :request_url => request.request_uri,
+                      :request_url => request.fullpath,
                       :ip_address => request.remote_ip,
                       :referer => request.env["HTTP_REFERER"],
                       :user_agent => request.env["HTTP_USER_AGENT"])
-      if logged_in?
-        # last_logged_in_at actually captures site activity, so update it now.
-        current_person.last_logged_in_at = Time.now
+      if person_signed_in?
+        # last_sign_in_at actually captures site activity, so update it now.
+        current_person.last_sign_in_at = Time.now
         current_person.save
       end
     end
   
     def require_activation
-      if logged_in?
+      if person_signed_in?
         unless current_person.active? or current_person.admin?
           redirect_to logout_url
         end
@@ -60,7 +60,7 @@ class ApplicationController < ActionController::Base
     def admin_warning
       default_domain = "example.com"
       default_password = "admin"
-      if logged_in? and current_person.admin? 
+      if person_signed_in? and current_person.admin? 
         if current_person.email =~ /@#{default_domain}$/
           flash[:notice] = %(Warning: your email address is still at 
             #{default_domain}.

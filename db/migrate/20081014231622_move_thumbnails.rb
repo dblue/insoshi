@@ -21,7 +21,7 @@ class MoveThumbnails < ActiveRecord::Migration
 
   def self.down
     add_column :photos, :thumbnail, :string
-    thumbnails = Thumbnail..all
+    thumbnails = Thumbnail.all
     thumbnails.each do |thumbnail|
       photo = Photo.new
       ATTRIBUTES.each do |attribute|

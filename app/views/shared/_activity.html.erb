@@ -4,7 +4,7 @@
   <p class="activity_detail">
     <%= feed_icon activity %>
     <%- recent ||= false -%>
-    <%= feed_message(activity, recent) %>
+    <%= raw feed_message(activity, recent) %>
   </p>
   <p class="meta published clear">
     <%= time_ago_in_words(activity.created_at).capitalize %> ago

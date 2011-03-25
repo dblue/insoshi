@@ -34,7 +34,7 @@
   <%- unless current_person?(@person) -%>
     <h3><%= @person.name %></h3>
     <ul class="tools">
-      <%- if logged_in? -%>
+      <%- if person_signed_in? -%>
         <%- unless Connection.exists?(@person, current_person) -%>
           <li><%= link_to "Request Connection",
                           person_connections_path(@person),

@@ -2,7 +2,7 @@ class MigratePhotoData < ActiveRecord::Migration
   
   def self.up
     # For each person, create a gallery and put all their photos there.
-    Person..all.each do |person|
+    Person.all.each do |person|
       gallery = person.galleries.new
       gallery.title = "Primary"
       primary_photo = person.photos.detect(&:primary?)
@@ -21,14 +21,14 @@ class MigratePhotoData < ActiveRecord::Migration
   end
 
   def self.down
-    Photo..all.each do |photo|
+    Photo.all.each do |photo|
       Photo.skip_callback(:log_activity) do
         photo.gallery_id = nil
         photo.primary = photo.avatar
         photo.save(false)
       end
     end
-    Gallery..all.each do |gallery|
+    Gallery.all.each do |gallery|
       gallery.destroy
     end
   end

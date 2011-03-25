@@ -50,12 +50,13 @@ def create_people
     names.each_with_index do |name, i|
       name.strip!
       full_name = "#{name} #{last_names.pick.capitalize}"
-      person = Person.create!(:email => "#{name.downcase}@example.com",
+      puts "#{full_name.downcase.parameterize}"
+      person = Person.create!(:email => "#{full_name.downcase.parameterize}@example.com",
                               :password => password, 
                               :password_confirmation => password,
                               :name => full_name,
                               :description => @lipsum)
-      person.last_logged_in_at = Time.now
+      person.last_sign_in_at = Time.now
       person.save
       gallery = Gallery.unsafe_create(:person => person, :title => 'Primary',
                                       :description => 'My first gallery')
@@ -70,7 +71,7 @@ end
 
 def make_connections
   person = default_person
-  people = Person..all - [person]
+  people = Person.all - [person]
   people.shuffle[0..20].each do |contact|
     Connection.request(contact, person, send_mail = false)
     sometimes(0.5) { Connection.accept(person, contact) }

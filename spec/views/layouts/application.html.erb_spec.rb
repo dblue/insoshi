@@ -10,11 +10,11 @@ describe "layout when not logged in" do
   end
   
   it "should have a login link" do
-    response.should have_tag("a[href=?]", login_path)
+    response.should have_tag("a[href=?]", new_person_session_path)
   end
   
   it "should have a signup link" do
-    response.should have_tag("a[href=?]", signup_path)
+    response.should have_tag("a[href=?]", new_person_registration_path)
   end
   
   it "should not have a sign out link" do
@@ -34,11 +34,11 @@ describe "layout when logged in" do
   end
   
   it "should not have a login link" do
-    response.should_not have_tag("a[href=?]", login_path)
+    response.should_not have_tag("a[href=?]", new_person_session_path)
   end
   
   it "should not have a signup link" do
-    response.should_not have_tag("a[href=?]", signup_path)
+    response.should_not have_tag("a[href=?]", new_person_registration_path)
   end
   
   it "should have a sign out link" do
