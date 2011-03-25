@@ -1,0 +1,19 @@
+common: &common
+  adapter: postgresql
+  username: kudzu
+  password:  # from psql setup, see Postgresql
+
+development:
+  <<: *common
+  database: insoshi_development
+
+test:
+  <<: *common
+  database: insoshi_test
+
+production:
+  <<: *common
+  database: insoshi_production
+  
+cucumber:
+  <<: *test

@@ -29,5 +29,9 @@
 #
 
 class AllPerson < Person
-  is_indexed :fields => [ 'name', 'description' ]
+  #is_indexed :fields => [ 'name', 'description' ]
+  define_index do
+    indexes name
+    indexes description
+  end
 end

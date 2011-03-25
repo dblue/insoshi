@@ -23,7 +23,7 @@
 #  message_notifications      :boolean(1)      default(TRUE)
 #  wall_comment_notifications :boolean(1)      default(TRUE)
 #  blog_comment_notifications :boolean(1)      default(TRUE)
-#  email_verified             :boolean(1)      
+#  email_verifiedified             :boolean(1)      
 #  avatar_id                  :integer(4)      
 #  identity_url               :string(255)     
 #
@@ -39,9 +39,16 @@ class Person < ActiveRecord::Base
                   :message_notifications, :wall_comment_notifications,
                   :blog_comment_notifications, :identity_url
   # Indexed fields for Sphinx
-  is_indexed :fields => [ 'name', 'description', 'deactivated',
-                          'email_verified'],
-             :conditions => "deactivated = false AND (email_verified IS NULL OR email_verified = true)"
+  #is_indexed :fields => [ 'name', 'description', 'deactivated',
+  #                        'email_verified'],
+  #           :conditions => "deactivated = false AND (email_verified IS NULL OR email_verified = true)"
+  define_index do
+    indexes name
+    indexes description
+    indexes deactivated
+    indexes email_verified  
+    where "deactivated = false AND (email_verified IS NULL or email_verified = true)"
+  end
   MAX_EMAIL = MAX_PASSWORD = 40
   MAX_NAME = 40
   MAX_DESCRIPTION = 5000

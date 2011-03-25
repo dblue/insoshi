@@ -21,7 +21,7 @@ class PersonMailer < ActionMailer::Base
   def message_notification(message)
     @server = server
     @message = message
-    @preferences_note => preferences_note(message.recipient)
+    @preferences_note = preferences_note(message.recipient)
     mail(
       :from => "Message notification <message@#{domain}>",
       :to => message.recipient.email,
@@ -33,7 +33,7 @@ class PersonMailer < ActionMailer::Base
     @server = server
     @connection = connection
     @url = edit_connection_path(connection)
-    @preferences_note => preferences_note(connection.person)    
+    @preferences_note = preferences_note(connection.person)    
     mail(
       :from => "Contact request <connection@#{domain}>",
       :to => connection.person.email,
@@ -45,7 +45,7 @@ class PersonMailer < ActionMailer::Base
     @server = server
     @comment = comment
     @url = blog_post_path(comment.commentable.blog, comment.commentable)
-    @preferences_note => preferences_note(comment.commented_person)    
+    @preferences_note = preferences_note(comment.commented_person)    
     mail(
       :from => "Comment notification <comment@#{domain}>",
       :to => comment.commented_person.email,
@@ -57,8 +57,8 @@ class PersonMailer < ActionMailer::Base
     @server = server
     @comment = comment
     @url = person_path(comment.commentable, :anchor => "wall")
-    @preferences_note => preferences_note(comment.commented_person)
-    mail
+    @preferences_note = preferences_note(comment.commented_person)
+    mail(
       :from => "Comment notification <comment@#{domain}>",
       :to => comment.commented_person.email,
       :subject => formatted_subject("New wall comment")

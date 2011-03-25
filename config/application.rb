@@ -1,19 +1,16 @@
-# Put this in config/application.rb
 require File.expand_path('../boot', __FILE__)
+
+require 'rails/all'
+
+# If you have a Gemfile, require the gems listed there, including any gems
+# you've limited to :test, :development, or :production.
+Bundler.require(:default, Rails.env) if defined?(Bundler)
 
 module Insoshi
   class Application < Rails::Application
-    config.load_paths += %W( #{RAILS_ROOT}/app/sweepers )
-    secret_file = File.join(RAILS_ROOT, "secret")
-    if File.exist?(secret_file)
-      secret = File.read(secret_file)
-    else
-      secret = ActiveSupport::SecureRandom.hex(64)
-      File.open(secret_file, 'w') { |f| f.write(secret) }
-    end
-    config.action_controller.session = {
-      :session_key => '_instant_social_session',
-      :secret      => secret
-    }
+    config.autoload_paths += %W(#{config.root}/app/sweeters)
+    config.autoload_paths += %W(#{config.root}/lib)
+    config.autoload_paths += Dir["#{config.root}/lib/**/"]
+    config.filter_parameters += [:password, :password_confirmation]
   end
 end

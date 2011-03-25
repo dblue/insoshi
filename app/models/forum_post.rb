@@ -15,10 +15,16 @@
 #
 
 class ForumPost < Post
-  is_indexed :fields => [ 'body' ],
-             :conditions => "type = 'ForumPost'",
-             :include => [{:association_name => 'topic', :field => 'name'}]
+  # is_indexed :fields => [ 'body' ],
+  #           :conditions => "type = 'ForumPost'",
+  #           :include => [{:association_name => 'topic', :field => 'name'}]
 
+  define_index do
+    indexes body
+    where "type = 'ForumPost'"
+    has :topic, :as => :name
+  end
+  
   attr_accessible :body
   
   belongs_to :topic,  :counter_cache => true
