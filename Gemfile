@@ -7,8 +7,10 @@ gem 'rails', '3.0.5'
 gem 'chronic'
 gem 'BlueCloth', :require => 'bluecloth'
 gem 'pg'
-gem 'thinking-sphinx', '2.0.0', :require => 'thinking_sphinx'
+gem 'thinking-sphinx', '2.0.2', :require => 'thinking_sphinx'
 gem 'devise'
+gem 'will_paginate'
+gem 'dynamic_form'
 
 group :test, :development do
   gem "rspec-rails", "~> 2.4"
