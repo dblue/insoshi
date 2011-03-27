@@ -16,7 +16,7 @@ describe Comment do
     it "should require a body" do
       comment = @post.comments.new
       comment.should_not be_valid
-      comment.errors.on(:body).should_not be_empty
+      comment.errors[:body].should_not be_empty
     end
   
     it "should have a maximum body length" do
@@ -117,7 +117,7 @@ describe Comment do
     it "should require a body" do
       comment = @person.comments.new
       comment.should_not be_valid
-      comment.errors.on(:body).should_not be_empty
+      comment.errors[:body].should_not be_empty
     end
   
     it "should have a maximum body length" do

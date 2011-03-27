@@ -13,17 +13,17 @@ describe Person do
 
     it 'requires password' do
       p = create_person(:password => nil)
-      p.errors.on(:password).should_not be_nil
+      p.errors[:password].should_not be_nil
     end
 
     it 'requires password confirmation' do
       p = create_person(:password_confirmation => nil)
-      p.errors.on(:password_confirmation).should_not be_nil
+      p.errors[:password_confirmation].should_not be_nil
     end
 
     it 'requires email' do
       p = create_person(:email => nil)
-      p.errors.on(:email).should_not be_nil
+      p.errors[:email].should_not be_nil
     end
     
     it "should prevent duplicate email addresses using a unique key" do
@@ -31,13 +31,13 @@ describe Person do
       duplicate = create_person
       lambda do
         # Pass 'false' to 'save' in order to skip the validations.
-        duplicate.save(false)
+        duplicate.save(:validate => false)
       end.should raise_error(ActiveRecord::StatementInvalid)
     end
 
     it "should require name" do
       p = create_person(:name => nil)
-      p.errors.on(:name).should_not be_nil
+      p.errors[:name].should_not be_nil
     end
 
     it "should strip spaces in email field" do
@@ -279,105 +279,6 @@ describe Person do
     end
   end
 
-  describe "authentication" do
-    it 'resets password' do
-      @person.update_attributes(:password => 'newp',
-                                :password_confirmation => 'newp')
-      Person.authenticate('quentin@example.com', 'newp').should == @person
-    end
-
-    it 'authenticates person' do
-      Person.authenticate('quentin@example.com', 'test').should == @person
-    end
-
-    it "should strip spaces for email" do
-      Person.authenticate('quentin@example.com ', 'test').should == @person
-    end
-
-    it "should authenticate case-insensitively" do
-      Person.authenticate('queNTin@eXample.com', 'test').should == @person
-    end
-
-    it 'sets remember token' do
-      @person.remember_me
-      @person.remember_token.should_not be_nil
-      @person.remember_token_expires_at.should_not be_nil
-    end
-
-    it 'unsets remember token' do
-      @person.remember_me
-      @person.remember_token.should_not be_nil
-      @person.forget_me
-      @person.remember_token.should be_nil
-    end
-
-    it 'remembers me for one week' do
-      before = 1.week.from_now.utc
-      @person.remember_me_for 1.week
-      after = 1.week.from_now.utc
-      @person.remember_token.should_not be_nil
-      @person.remember_token_expires_at.should_not be_nil
-      @person.remember_token_expires_at.between?(before, after).should be_true
-    end
-
-    it 'remembers me until one week' do
-      time = 1.week.from_now.utc
-      @person.remember_me_until time
-      @person.remember_token.should_not be_nil
-      @person.remember_token_expires_at.should_not be_nil
-      @person.remember_token_expires_at.should == time
-    end
-
-    it 'remembers me default two weeks' do
-      before = 2.years.from_now.utc
-      @person.remember_me
-      after = 2.years.from_now.utc
-      @person.remember_token.should_not be_nil
-      @person.remember_token_expires_at.should_not be_nil
-      @person.remember_token_expires_at.between?(before, after).should be_true
-    end
-  end
-
-  describe "password edit" do
-
-    before(:each) do
-      @password = @person.unencrypted_password
-      @newpass  = "foobar"
-    end
-
-    it "should change the password" do
-      @person.change_password?(:verify_password       => @password,
-                               :new_password          => @newpass,
-                               :password_confirmation => @newpass)
-      @person.unencrypted_password.should == @newpass
-    end
-
-    it "should not change password on failed verification" do
-      @person.change_password?(:verify_password       => @password + "not!",
-                               :new_password          => @newpass,
-                               :password_confirmation => @newpass)
-      @person.unencrypted_password.should_not == @newpass
-      @person.errors.on(:password).should =~ /incorrect/
-    end
-
-    it "should not change password on failed agreement" do
-      @person.change_password?(:verify_password       => @password,
-                               :new_password          => @newpass + "not!",
-                               :password_confirmation => @newpass)
-      @person.unencrypted_password.should_not == @newpass
-      @person.errors.on(:password).should =~ /match/
-    end
-
-    it "should not allow invalid new password" do
-      @newpass = ""
-      @person.change_password?(:verify_password       => @password,
-                               :new_password          => @newpass,
-                               :password_confirmation => @newpass)
-      @person.unencrypted_password.should_not == @newpass
-      @person.errors.on(:password).should_not be_nil
-    end
-  end
-
   describe "activation" do
 
     it "should deactivate a person" do
@@ -476,8 +377,8 @@ describe Person do
 
     def create_person(options = {})
       record = Person.new({ :email => 'quire@example.com',
-                            :password => 'quire',
-                            :password_confirmation => 'quire',
+                            :password => 'quire23',
+                            :password_confirmation => 'quire23',
                             :name => 'Quire',
                             :description => 'A new person' }.merge(options))
       record.valid?

@@ -15,7 +15,7 @@ describe ForumPost do
   it "should require a body" do
     post = ForumPost.new
     post.should_not be_valid
-    post.errors.on(:body).should_not be_empty
+    post.errors[:body].should_not be_empty
   end
   
   it "should have a maximum body length" do

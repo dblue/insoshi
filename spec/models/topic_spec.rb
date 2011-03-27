@@ -15,7 +15,7 @@ describe Topic do
   it "should require a name" do
     topic = Topic.new
     topic.should_not be_valid
-    topic.errors.on(:name).should_not be_empty
+    topic.errors[:name].should_not be_empty
   end
 
   it "should have a max name length" do

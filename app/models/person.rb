@@ -23,7 +23,7 @@
 #  message_notifications      :boolean(1)      default(TRUE)
 #  wall_comment_notifications :boolean(1)      default(TRUE)
 #  blog_comment_notifications :boolean(1)      default(TRUE)
-#  email_verifiedified             :boolean(1)      
+#  email_verified             :boolean(1)      
 #  avatar_id                  :integer(4)      
 #  identity_url               :string(255)     
 #
@@ -41,7 +41,7 @@ class Person < ActiveRecord::Base
   attr_accessible :email, :password, :password_confirmation, :remember_me,
                   :name, :description, :connection_notifications,
                   :message_notifications, :wall_comment_notifications,
-                  :blog_comment_notifications
+                  :blog_comment_notifications, :verify_password
                   
   attr_accessor :sorted_photos
 
@@ -110,11 +110,6 @@ class Person < ActiveRecord::Base
   has_many :attendee_events, :through => :event_attendees, :source => :event
 
   validates_presence_of     :email, :name
-  validates_presence_of     :password,              :if => :password_required?
-  validates_presence_of     :password_confirmation, :if => :password_required?
-  validates_length_of       :password, :within => 4..MAX_PASSWORD,
-                                       :if => :password_required?
-  validates_confirmation_of :password, :if => :password_required?
   validates_length_of       :email, :within => 6..MAX_EMAIL
   validates_length_of       :name,  :maximum => MAX_NAME
   validates_length_of       :description, :maximum => MAX_DESCRIPTION
@@ -122,7 +117,6 @@ class Person < ActiveRecord::Base
                             :with => EMAIL_REGEX,
                             :message => "must be a valid email address"
   validates_uniqueness_of   :email
-  validates_uniqueness_of   :identity_url, :allow_nil => true
 
   before_create :create_blog, :check_config_for_deactivation
   before_validation :prepare_email, :handle_nil_description
@@ -132,24 +126,28 @@ class Person < ActiveRecord::Base
   after_update :log_activity_description_changed
   before_destroy :destroy_activities, :destroy_feeds
 
+  scope :active, lambda{ where(conditions_for_active) }
+  scope :mostly_active, lambda {where(conditions_for_mostly_active)}
+
   class << self
 
     # Return the paginated active users.
-    def active(page = 1)
-      paginate(:all, :page => page,
-                     :per_page => RASTER_PER_PAGE,
-                     :conditions => conditions_for_active)
-    end
+    # def active(page = 1)
+    #   paginate(:all, :page => page,
+    #                  :per_page => RASTER_PER_PAGE,
+    #                  :conditions => conditions_for_active)
+    # end
     
     # Return the people who are 'mostly' active.
     # People are mostly active if they have logged in recently enough.
-    def mostly_active(page = 1)
-      paginate(:all, :page => page,
-                     :per_page => RASTER_PER_PAGE,
-                     :conditions => conditions_for_mostly_active,
-                     :order => "created_at DESC")
-    end
-    
+    # def mostly_active(page = 1)
+    #   paginate(:all, :page => page,
+    #                  :per_page => RASTER_PER_PAGE,
+    #                  :conditions => conditions_for_mostly_active,
+    #                  :order => "created_at DESC")
+    # end
+
+    # TODO: convert these 3 to scopes after testing works.
     # Return *all* the active users.
     def all_active
       self.where(conditions_for_active)
@@ -360,20 +358,13 @@ class Person < ActiveRecord::Base
     # Connect new users to "Tom".
     def connect_to_admin
       # Find the first admin created.
-      # The ununitiated should Google "tom myspace".
+      # The uninitiated should Google "tom myspace".
       tom = Person.find_first_admin
       unless tom.nil? or tom == self
         Connection.connect(self, tom)
       end
     end
 
-    ## Other private method(s)
-
-    def password_required?
-      (encrypted_password.blank? && identity_url.nil?) || !password.blank? ||
-      !verify_password.nil?
-    end
-    
     class << self
     
       # Return the conditions for a user to be active.

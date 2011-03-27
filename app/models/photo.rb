@@ -59,18 +59,18 @@ class Photo < ActiveRecord::Base
   # Override the crappy default AttachmentFu error messages.
   def validate
     if filename.nil?
-      errors.add_to_base("You must choose a file to upload")
+      errors.add(:base, "You must choose a file to upload")
     else
       # Images should only be GIF, JPEG, or PNG
       enum = attachment_options[:content_type]
       unless enum.nil? || enum.include?(send(:content_type))
-        errors.add_to_base("You can only upload images (GIF, JPEG, or PNG)")
+        errors.add(:base, "You can only upload images (GIF, JPEG, or PNG)")
       end
       # Images should be less than UPLOAD_LIMIT MB.
       enum = attachment_options[:size]
       unless enum.nil? || enum.include?(send(:size))
         msg = "Images should be smaller than #{UPLOAD_LIMIT} MB"
-        errors.add_to_base(msg)
+        errors.add(:base, msg)
       end
     end
   end
