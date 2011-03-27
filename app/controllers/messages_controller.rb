@@ -1,6 +1,6 @@
 class MessagesController < ApplicationController
 
-  before_filter :login_required, :setup
+  before_filter :authenticate_person!, :setup
   before_filter :authenticate_person, :only => :show
 
   # GET /messages

@@ -1,6 +1,6 @@
 class PhotosController < ApplicationController
 
-  before_filter :login_required
+  before_filter :authenticate_person!
   before_filter :correct_user_required,
                 :only => [ :edit, :update, :destroy, :set_primary, 
                            :set_avatar ]

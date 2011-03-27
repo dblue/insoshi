@@ -1,6 +1,6 @@
 class ForumsController < ApplicationController
   
-  before_filter :login_required, :setup
+  before_filter :authenticate_person!, :setup
 
   def index
     @forums = Forum.all

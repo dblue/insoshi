@@ -1,6 +1,6 @@
 class Admin::PreferencesController < ApplicationController
   
-  before_filter :login_required, :admin_required
+  before_filter :authenticate_person!, :admin_required
   before_filter :setup
   
   in_place_edit_for :post, :app_name

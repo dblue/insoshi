@@ -1,6 +1,6 @@
 class Admin::ForumsController < ApplicationController
 
-  before_filter :login_required, :admin_required, :setup
+  before_filter :authenticate_person!, :admin_required, :setup
   before_filter :protect_last_forum, :only => :destroy
   
 

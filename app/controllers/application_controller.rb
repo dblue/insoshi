@@ -18,7 +18,7 @@ class ApplicationController < ActionController::Base
   private
 
     def admin_required
-      unless current_person.admin?
+      unless current_person && current_person.admin?
         flash[:error] = "Admin access required"
         redirect_to home_url
       end

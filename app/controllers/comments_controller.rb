@@ -2,7 +2,7 @@
 # There is some trickery to handle the two in a unified manner.
 class CommentsController < ApplicationController
   
-  before_filter :login_required
+  before_filter :authenticate_person!
   before_filter :get_instance_vars
   before_filter :authorize_destroy, :only => [:destroy]
   before_filter :connection_required

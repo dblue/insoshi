@@ -4,7 +4,7 @@ class PostsController < ApplicationController
   include ApplicationHelper
   include BlogsHelper
   
-  before_filter :login_required
+  before_filter :authenticate_person!
   before_filter :get_instance_vars
   before_filter :check_blog_mismatch, :only => :show
   before_filter :authorize_new, :only => [:create, :new]
