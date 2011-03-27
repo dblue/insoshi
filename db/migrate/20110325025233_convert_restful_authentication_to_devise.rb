@@ -42,9 +42,15 @@ class ConvertRestfulAuthenticationToDevise < ActiveRecord::Migration
   end
 
   def self.down
+    
+    # indicies
+    remove_index :people, :reset_password_token
+    remove_index :people, :confirmation_token
+    remove_index :people, :unlock_token
+    
     # database authenticable
     change_column :people, :email, :string
-    # remove_column :people, :password_salt
+    remove_column :people, :password_salt
     rename_column :people, :encrypted_password, :crypted_password
     change_column :people, :crypted_password, :string
     
@@ -74,9 +80,5 @@ class ConvertRestfulAuthenticationToDevise < ActiveRecord::Migration
     # validatable
     remove_column :people, :validation_token
 
-    # indicies
-    remove_index :people, :reset_password_token
-    remove_index :people, :confirmation_token
-    remove_index :people, :unlock_token
   end
 end

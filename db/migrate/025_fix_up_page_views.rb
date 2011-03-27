@@ -6,8 +6,8 @@ class FixUpPageViews < ActiveRecord::Migration
   end
 
   def self.down
+    remove_index  :page_views, [:person_id, :created_at]
     add_column    :page_views, :user_id, :integer
     remove_column :page_views, :person_id
-    remove_index  :page_views, [:person_id, :created_at]
   end
 end
