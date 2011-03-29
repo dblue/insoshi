@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110325025233) do
+ActiveRecord::Schema.define(:version => 20110327163258) do
 
   create_table "activities", :force => true do |t|
     t.boolean  "public"
@@ -126,7 +126,7 @@ ActiveRecord::Schema.define(:version => 20110325025233) do
   create_table "galleries", :force => true do |t|
     t.integer  "person_id"
     t.string   "title"
-    t.string   "description"
+    t.text     "description"
     t.integer  "photos_count",     :default => 0, :null => false
     t.integer  "primary_photo_id"
     t.datetime "created_at"

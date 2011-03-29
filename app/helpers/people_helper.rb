@@ -17,12 +17,12 @@ module PeopleHelper
     unless options[:link_options].nil?                    
       link_options.merge!(options[:link_options])
     end
-    content = image_tag(person.send(image), image_options)
+    content = raw image_tag(person.send(image), image_options)
     # This is a hack needed for the way the designer handled rastered images
     # (with a 'vcard' class).
     if options[:vcard]
       content = %(#{content}#{content_tag(:span, h(person.name), 
-                                                 :class => "fn" )})
+                                                 :class => "fn" )}).html_safe
     end
     link_to(content, link, link_options)
   end
@@ -52,7 +52,8 @@ module PeopleHelper
       person = text
       text = person.name
     end
-    '<span class="imgHoverMarker">' + image_tag(person.thumbnail) + person_link(text, person, html_options) + '</span>'
+    result = '<span class="imgHoverMarker">' + image_tag(person.thumbnail) + person_link(text, person, html_options) + '</span>'
+    result.html_safe
   end
 
   def person_image_hover_text(text, person, html_options = nil)

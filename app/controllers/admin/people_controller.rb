@@ -3,7 +3,7 @@ class Admin::PeopleController < ApplicationController
   before_filter :authenticate_person!, :admin_required
 
   def index
-    @people = Person.paginate(:all, :page => params[:page], :order => :name)
+    @people = Person.all.paginate(:page => params[:page], :order => :name)
   end
 
   def update

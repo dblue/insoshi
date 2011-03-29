@@ -20,12 +20,12 @@ describe PhotosController do
       
     it "should protect the index page" do
       get :index
-      response.should redirect_to(login_url)
+      response.should redirect_to(new_person_session_url)
     end
   end
 
   describe "when logged in" do
-    integrate_views
+    render_views
     
     before(:each) do
 

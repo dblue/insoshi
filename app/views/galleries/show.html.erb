@@ -11,7 +11,7 @@
     <p>
       <% if current_person?(@gallery.person)%>
         <%= link_to "Add photo", new_gallery_photo_path(@gallery) %> |
-        <%= link_to "Edit gallery", edit_gallery_path %> |
+        <%= link_to "Edit gallery", edit_gallery_path(@gallery) %> |
       <% end %>
       <%= link_to "All galleries", person_path(@gallery.person,
                                    :anchor => 'tGalleries') %>

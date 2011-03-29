@@ -48,12 +48,13 @@ describe EventsController do
       events.should_receive(:person_events).with(@person).and_return(events)
       get :index, :day => Time.now.mday
     end
-
   
     it "should assign the found events for the view" do
-      Event.should_receive(:find).and_return([mock_event])
+      events = mock("Array of Events")
+      Event.should_receive(:monthly_events).with(Time.now.to_date).and_return(events)
+      events.should_receive(:person_events).with(@person).and_return([mock_event])
       get :index
-      assigns[:events].should == [mock_event]
+      assigns(:events).should == [mock_event]
     end
 
     it "should render the found events as xml" do

@@ -1,7 +1,7 @@
-<%- column_div :type => :primary do -%>
+<%= column_div :type => :primary do -%>
   <h2>New gallery</h2>
 
-  <%- form_for(@gallery) do |f| -%>
+  <%= form_for(@gallery) do |f| -%>
     <div class="form_row">
       <label for="title">Title</label>
       <%= f.text_field :title %>

@@ -8,8 +8,7 @@ class PeopleController < ApplicationController
   before_filter :setup
   
   def index
-    @people = Person.mostly_active.paginate(params[:page])
-
+    @people = Person.mostly_active.paginate :page => params[:page]
     respond_to do |format|
       format.html
     end
@@ -48,14 +47,12 @@ class PeopleController < ApplicationController
   end
 
   def create
-    cookies.delete :auth_token
     @person = Person.new(params[:person])
     respond_to do |format|
       @person.email_verified = false if global_prefs.email_verifications?
-      @person.identity_url = session[:verified_identity_url]
+      @person.identity_url = ''
       @person.save
       if @person.errors.empty?
-        session[:verified_identity_url] = nil
         if global_prefs.email_verifications?
           @person.email_verifications.create
           flash[:notice] = %(Thanks for signing up! Check your email
@@ -68,11 +65,8 @@ class PeopleController < ApplicationController
         end
       else
         @body = "register single-col"
-        format.html { if @person.identity_url.blank? 
+        format.html {  
                         render :action => 'new'
-                      else
-                        render :partial => "shared/personal_details.html.erb", :object => @person, :layout => 'application'
-                      end
                     }
       end
     end

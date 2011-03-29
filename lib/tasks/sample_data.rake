@@ -51,7 +51,7 @@ def create_people
       name.strip!
       full_name = "#{name} #{last_names.pick.capitalize}"
       puts "#{full_name.downcase.parameterize}"
-      person = Person.create!(:email => "#{full_name.downcase.parameterize}@example.com",
+      person = Person.create!(:email => "#{name.downcase.parameterize}@example.com",
                               :password => password, 
                               :password_confirmation => password,
                               :name => full_name,

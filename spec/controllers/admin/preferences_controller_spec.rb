@@ -5,22 +5,22 @@ describe Admin::PreferencesController do
   describe "authentication" do
     it "should require admin to access" do
       login_as :quentin
-      get :index
+      get :show
       response.should redirect_to(home_url)
     end
   
     it "should allow an admin to access" do
       login_as :admin
-      get :index
+      get :show
       response.should be_success
     end
   end
 
   describe "changing preferences" do
-    integrate_views
+    render_views
     
     before(:each) do
-      @prefs = Preference.find(:first)
+      @prefs = Preference.current
       login_as :admin
     end
     

@@ -14,4 +14,5 @@ gem 'dynamic_form'
 
 group :test, :development do
   gem "rspec-rails", "~> 2.4"
+  gem "webrat"
 end

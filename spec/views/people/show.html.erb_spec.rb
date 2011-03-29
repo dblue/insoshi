@@ -6,23 +6,26 @@ describe "/people/show.html.erb" do
     @controller.params[:controller] = "people"
     @person = login_as(:quentin)
     @person.description = "Foo *bar*"
-    assigns[:person] = @person
-    assigns[:blog] = @person.blog
-    assigns[:posts] = @person.blog.posts.paginate(:page => 1)
-    assigns[:galleries] = @person.galleries.paginate(:page => 1)
-    assigns[:some_contacts] = @person.some_contacts
-    assigns[:common_contacts] = []
-    render "/people/show.html.erb"
+    @blog = stub_model(Blog)
+    @person.blog = @blog
+    @blog.person = @person
+    assign(:person, @person)
+    assign(:blog, @person.blog)
+    assign(:posts, @person.blog.posts.paginate(:page => 1))
+    assign(:galleries, @person.galleries.paginate(:page => 1))
+    assign(:some_contacts, @person.some_contacts)
+    assign(:common_contacts, [])
+    render
   end
 
   it "should have the right title" do
-    response.should have_tag("h2", /#{@person.name}/)
+    rendered.should have_selector("h2", :content => @person.name)
   end
   
   it "should have a Markdown-ed description if BlueCloth is present" do
     begin
-      BlueCloth.new("used to raise an exeption")
-      response.should have_tag("em", "bar")
+      BlueCloth.new("used to raise an exception")
+      rendered.should have_selector('em', :content => "bar")
     rescue NameError
       nil
     end

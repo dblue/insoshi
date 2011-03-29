@@ -1,11 +1,45 @@
-# Amazingly, the call to 'inspect' makes the db insertion work.
-<% password = Person.encrypt('test').inspect %>
+# default password for testing is foobar
+DEFAULTS: &DEFAULTS
+  email: ""
+  name: 
+  description: 
+  encrypted_password: $2a$10$is20Gq8wM1w8Qcl4G70nE.Ad2tfmilxWLnH8CXqXOIXF7ftKT4Hu.
+  password_salt: $2a$10$is20Gq8wM1w8Qcl4G70nE.
+  created_at: 
+  updated_at: 
+  last_sign_in_ip: 
+  current_sign_in_ip: 
+  last_sign_in_at: 
+  current_sign_in_at: 
+  deactivated: false
+  connection_notifications: true
+  message_notifications: true
+  blog_comment_notifications: true
+  failed_attempts: 0
+  email_verified: 
+  confirmation_sent_at: 
+  wall_comments_count: 0
+  admin: false
+  sign_in_count: 0
+  avatar_id: 
+  reset_password_token: 
+  remember_token: 
+  validation_token: 
+  locked_at: 
+  confirmation_token: 
+  blog_post_comments_count: 0
+  last_contacted_at: 
+  remember_created_at: 
+  identity_url: 
+  forum_posts_count: 0
+  unlock_token: 
+  confirmed_at: 
+  wall_comment_notifications: true
 
 quentin:
   email: quentin@example.com
   name: Quentin
   description: I'm Quentin
-  crypted_password: <%= password %>
   created_at: <%= 5.days.ago.to_s :db %>
   last_sign_in_at: <%= 1.day.ago.to_s :db %>
   deactivated: false
@@ -14,12 +48,12 @@ quentin:
   wall_comment_notifications: true
   blog_comment_notifications: true
   email_verified: true
+  <<: *DEFAULTS
 
 aaron:
   email: aaron@example.com
   name: Aaron
   description: I'm Aaron
-  crypted_password: <%= password %>
   created_at: <%= 1.day.ago.to_s :db %>
   deactivated: false
   connection_notifications: true
@@ -27,45 +61,46 @@ aaron:
   wall_comment_notifications: true
   blog_comment_notifications: true
   email_verified: true
+  <<: *DEFAULTS
 
 kelly:
   email: kelly@example.com
   name: Kelly
   description: I'm Kelly
-  crypted_password: <%= password %>
   created_at: <%= 1.day.ago.to_s :db %>
   deactivated: false
   connection_notifications: true
   message_notifications: true
   wall_comment_notifications: true
   blog_comment_notifications: true
+  <<: *DEFAULTS
   
 admin:
   email: admin@example.com
   name: admin
   description: I'm the admin!
   admin: true
-  crypted_password: <%= password %>
   created_at: <%= 5.days.ago.to_s :db %>
   deactivated: false
   connection_notifications: true
   message_notifications: true
   wall_comment_notifications: true
   blog_comment_notifications: true
+  <<: *DEFAULTS
 
 deactivated:
   email: deactivated@example.com
   name: Deactivated Person
   description: I didn't deserve to be deactivated
-  crypted_password: <%= password %>
   created_at: <%= 1.day.ago.to_s :db %>
   deactivated: true
+  <<: *DEFAULTS
 
 email_unverified:
   email: inactive@example.com
   name: Email unverified
   description: Email unverified
-  crypted_password: <%= password %>
   created_at: <%= 1.day.ago.to_s :db %>
   email_verified: false 
+  <<: *DEFAULTS
   

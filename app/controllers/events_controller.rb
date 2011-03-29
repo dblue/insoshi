@@ -1,7 +1,7 @@
 class EventsController < ApplicationController
 
   # before_filter :in_progress unless test?
-  before_filter :authenticate_person!
+  before_filter :authenticate_person!, :except => [:index]
   before_filter :load_event, :except => [:index, :new, :create]
   before_filter :load_date, :only => [:index, :show]
   before_filter :authorize_show, :only => :show

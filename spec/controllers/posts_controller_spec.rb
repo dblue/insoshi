@@ -4,7 +4,7 @@ describe PostsController do
   include BlogsHelper
 
   describe "forum posts" do
-    integrate_views
+    render_views
   
     before(:each) do
       @person = login_as(:quentin)
@@ -72,7 +72,7 @@ describe PostsController do
   end
   
   describe "blog posts" do
-    integrate_views
+    render_views
   
     before(:each) do
       @person = login_as(:quentin)

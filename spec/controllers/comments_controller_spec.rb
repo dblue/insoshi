@@ -3,7 +3,7 @@ require File.dirname(__FILE__) + '/../spec_helper'
 describe CommentsController do
   
   describe "blog comments" do
-    integrate_views
+    render_views
   
     before(:each) do
       @commenter = login_as(:aaron)
@@ -64,7 +64,7 @@ describe CommentsController do
 
   
   describe "wall comments" do
-    integrate_views
+    render_views
   
     before(:each) do
       @commenter = login_as(:aaron)

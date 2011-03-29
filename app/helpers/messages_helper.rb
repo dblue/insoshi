@@ -11,6 +11,6 @@ module MessagesHelper
       image_tag("icons/email_add.png", :class => "icon")
     elsif message.replied_to?
       image_tag("icons/email_go.png", :class => "icon")
-    end
+    end.html_safe
   end
 end

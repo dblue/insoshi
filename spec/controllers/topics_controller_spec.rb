@@ -1,15 +1,18 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe TopicsController do
-  integrate_views
+  render_views
 
   before(:each) do
     @topic = topics(:one)
+    @forum = forums(:one)
   end
   
   it "should require login for new" do
-    get :new
-    response.should redirect_to(login_url)
+    with_options :forum_id => forums(:one) do |page|
+      page.get :new
+      response.should redirect_to(new_person_session_url)
+    end
   end
   
   it "should have working pages" do

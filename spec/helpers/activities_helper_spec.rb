@@ -2,6 +2,8 @@ require File.dirname(__FILE__) + '/../spec_helper'
 include ActivitiesHelper
 include SharedHelper
 include PeopleHelper
+
+
 describe ActivitiesHelper do
 
   before(:each) do

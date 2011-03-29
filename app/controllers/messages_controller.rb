@@ -115,7 +115,7 @@ class MessagesController < ApplicationController
       @message = Message.find(params[:id])
       unless (current_person == @message.sender or
               current_person == @message.recipient)
-        redirect_to login_url
+        redirect_to new_person_session_url
       end
     end
         

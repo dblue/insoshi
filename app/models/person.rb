@@ -32,9 +32,7 @@ class Person < ActiveRecord::Base
   include ActivityLogger
   extend PreferencesHelper
 
-  # Include default devise modules. Others available are:
-  # :token_authenticatable, :confirmable, :lockable and :timeoutable
-  devise :database_authenticatable, :registerable,
+  devise :database_authenticatable, :registerable, :confirmable,
          :recoverable, :rememberable, :trackable, :validatable
 
   # Setup accessible (or protected) attributes for your model
@@ -43,7 +41,7 @@ class Person < ActiveRecord::Base
                   :message_notifications, :wall_comment_notifications,
                   :blog_comment_notifications, :verify_password
                   
-  attr_accessor :sorted_photos
+  attr_accessor :sorted_photos, :verify_password
 
   # Indexed fields for Sphinx
   #is_indexed :fields => [ 'name', 'description', 'deactivated',
@@ -147,7 +145,7 @@ class Person < ActiveRecord::Base
     #                  :order => "created_at DESC")
     # end
 
-    # TODO: convert these 3 to scopes after testing works.
+    #TODO: convert these 3 to scopes after testing works.
     # Return *all* the active users.
     def all_active
       self.where(conditions_for_active)
@@ -208,7 +206,8 @@ class Person < ActiveRecord::Base
   end
 
   ## Message methods
-
+  
+  #TODO: Replace with scopes.  Get paginate out of the models.
   def received_messages(page = 1)
     _received_messages.paginate(:page => page, :per_page => MESSAGES_PER_PAGE)
   end
@@ -222,10 +221,7 @@ class Person < ActiveRecord::Base
                     (recipient_id = :person AND recipient_deleted_at > :t)),
                   { :person => id, :t => TRASH_TIME_AGO }]
     order = 'created_at DESC'
-    trashed = Message.paginate(:all, :conditions => conditions,
-                                     :order => order,
-                                     :page => page,
-                                     :per_page => MESSAGES_PER_PAGE)
+    trashed = Message.where(conditions).order(order).paginate( :page => page, :per_page => MESSAGES_PER_PAGE )
   end
 
   def recent_messages

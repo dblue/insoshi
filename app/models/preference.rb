@@ -28,6 +28,10 @@ class Preference < ActiveRecord::Base
   validates_presence_of :domain,       :if => :using_email?
   validates_presence_of :smtp_server,  :if => :using_email?
   
+  def self.current
+    order("created_at DESC").limit(1).first
+  end
+  
   # Can we send mail with the present configuration?
   def can_send_email?
     not (domain.blank? or smtp_server.blank?)

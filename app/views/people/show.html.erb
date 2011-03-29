@@ -1,5 +1,5 @@
 <div id="profile" style="display: none;">
-  <% tabs_for(:id => 'tabCol') do |tabs| %>
+  <%= tabs_for(:id => 'tabCol') do |tabs| %>
     <% tabs.create('tProfile', 'Profile', :class => "profile vcard") do %>
       <%= render :partial => 'profile' %>
       <div class="clear"></div>
@@ -30,7 +30,6 @@
                  :locals => { :galleries => @galleries } %>
       <div class="clear"></div>
     <% end %>
-    <%= tabs.render %>
   <% end %>
 </div>
 <script type='text/javascript'>

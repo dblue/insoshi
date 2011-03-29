@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe ForumsController do
-  integrate_views
+  render_views
   
   before(:each) do
     @person = login_as(:quentin)

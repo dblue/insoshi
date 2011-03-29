@@ -7,7 +7,7 @@ module PreferencesHelper
   # the redundant database hits is the whole point of using ||= here), but
   # in test mode it's a pain in the ass.
   def global_prefs
-    return Preference.first if test?
-    @global_prefs ||= Preference.first
+    return Preference.current if test?
+    @global_prefs ||= Preference.current
   end
 end

@@ -1,6 +1,6 @@
-<%- column_div :type => :primary do -%>
+<%= column_div :type => :primary do -%>
 <h2>Global Preferences</h2>
-<div class="button"><%= link_to 'Edit', edit_admin_preference_path(@preferences) %></div>
+<div class="button"><%= link_to 'Edit', edit_admin_preferences_path %></div>
 <div class="prefItem">
   <div class="prefLabel">Application name</div>
   <div class="prefValue"><%= h @preferences.app_name %></div>

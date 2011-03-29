@@ -30,7 +30,7 @@ module ApplicationHelper
       events   = menu_element("Events", events_path)
       #links = [home, profile, contacts, messages, blog, people, forum]
       links = [home, profile, messages, people, forum]
-      # TODO: put this in once events are ready.
+      #TODO: put this in once events are ready.
       # links.push(events)
       
     elsif person_signed_in? and admin_view?
@@ -103,7 +103,7 @@ module ApplicationHelper
       # Sometimes Markdown throws exceptions, so rescue gracefully.
       processed_text = content_tag(:p, sanitize(text))
     end
-    add_tag_options(processed_text, tag_opts)
+    add_tag_options(processed_text, tag_opts).html_safe
   end
   
   # Output a column div.
@@ -136,7 +136,8 @@ module ApplicationHelper
     end
     opts = { :class => 'email-link' }
     if use_image
-      str = link_to(action + ' ' + img, path, opts)
+      msg = action + ' '  + img
+      str = link_to(msg.html_safe, path, opts)
     else
       str = link_to_unless_current(action, path, opts)
     end
@@ -148,11 +149,11 @@ module ApplicationHelper
       %(HTML and
         #{link_to("Markdown",
                   "http://daringfireball.net/projects/markdown/basics",
-                  :popup => true)}
+                  :target => "_blank")}
        formatting supported)
     else 
       "HTML formatting supported"
-    end
+    end.html_safe
   end
 
   private

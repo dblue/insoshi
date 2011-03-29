@@ -10,7 +10,7 @@
     <p class="welcome">
       <%- if person_signed_in? -%>
         Welcome, <%= h current_person.name %>!
-        (<%= link_to "Sign out", logout_path %>)
+        (<%= link_to "Sign out", destroy_person_session_path %>)
         <%- if current_person.admin? -%>
           <br />
           <%- if admin_view? -%>
@@ -23,9 +23,6 @@
         <%= link_to "Sign in", new_person_session_path %> or
         <%= link_to "Sign up", new_person_registration_path %>
         <%- if global_prefs.can_send_email? -%>
-        <br />
-        <%= link_to "I forgot my password",
-                     new_password_reminder_path %>
         <%- end -%>             
       <%- end -%>
     </p>

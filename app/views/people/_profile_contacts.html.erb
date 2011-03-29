@@ -1,4 +1,4 @@
-<%- column_div :type => :primary do -%>
+<%= column_div :type => :primary do -%>
   <h2><%= @person.name %>'s Contacts</h2>
   <% if @person.connections.count > Person::MAX_DEFAULT_CONTACTS %>
     <div class='button see_all_link'>
@@ -10,7 +10,7 @@
   <%= render :partial => 'common_contacts' %>
 <%- end -%>
 
-<%- column_div :type => :secondary do -%>
+<%= column_div :type => :secondary do -%>
   <%= render :partial => 'searches/box' %>
 <%- end -%>
 

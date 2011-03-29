@@ -5,12 +5,10 @@ Insoshi::Application.routes.draw do
     resources :comments
   end
 
-  resources :preferences
   resources :searches
   resources :activities
   resources :connections
-  resources :photos do
-  
+  resources :photos do  
     member do
       put :set_avatar
       put :set_primary
@@ -46,7 +44,9 @@ Insoshi::Application.routes.draw do
 
   namespace :admin do
     resources :people
-    resources :preferences
+    
+    #NOTE: This is a singular resource with the name 'preferences'
+    resource :preferences
     resources :forums do  
       resources :topics do    
         resources :posts

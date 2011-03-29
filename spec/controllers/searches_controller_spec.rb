@@ -24,12 +24,12 @@ describe SearchesController do
   end
 
   describe "Person searches" do
-    integrate_views
+    render_views
 
     it "should require login" do
-      logout
+      sign_out :person
       get :index, :q => "", :model => "Person"
-      response.should redirect_to(login_url)
+      response.should redirect_to(new_person_session_url)
     end
     
     it "should redirect for an invalid model" do
@@ -83,7 +83,7 @@ describe SearchesController do
     end
     
     describe "as an admin" do
-      integrate_views
+      render_views
       
       before(:each) do
         login_as :admin
@@ -137,7 +137,7 @@ describe SearchesController do
   end
   
   describe "Forum post searches" do
-    integrate_views
+    render_views
     
     before(:each) do
       @post = posts(:forum)

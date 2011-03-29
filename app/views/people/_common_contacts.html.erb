@@ -1,6 +1,5 @@
 <%- unless current_person?(@person) or @common_contacts.empty? -%>
-    <h2>Common Contacts</h2>
-    
+    <h2>Common Contacts</h2>  
 
     <%- if @common_contacts.length > Person::MAX_DEFAULT_CONTACTS -%>
         <div class="button see_all_link">

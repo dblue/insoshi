@@ -1,4 +1,4 @@
-<%- column_div :type => :primary do -%>
+<%= column_div :type => :primary do -%>
 
   <h2>
   <%= link_to "Blog for #{h @blog.person.name}", blog_tab_path(@blog) %>
@@ -34,6 +34,6 @@
   <%- end -%>
 <%- end -%>
 
-  <%- column_div :type => :secondary do -%>
+  <%= column_div :type => :secondary do -%>
     <%= render :partial => 'shared/minifeed' %>
   <%- end -%>

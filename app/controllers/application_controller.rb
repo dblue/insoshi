@@ -66,7 +66,7 @@ class ApplicationController < ActionController::Base
             #{default_domain}.
             <a href="#{edit_person_path(current_person)}">Change it here</a>.)
         end
-        if current_person.unencrypted_password == default_password
+        if current_person.password == default_password
           flash[:error] = %(Warning: your password is still the default.
             <a href="#{edit_person_path(current_person)}">Change it here</a>.)          
         end

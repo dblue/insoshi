@@ -1,6 +1,6 @@
 <h2>New message</h2>
 
-<%- column_div :type => :primary do -%>
+<%= column_div :type => :primary do -%>
 
   <%= error_messages_for :message %>
   
@@ -14,7 +14,7 @@
     <div class="form_row full">
       <label for="recipient">To</label>
       <%= text_field_tag :recipient, h(@recipient.name) %>
-      <!-- TODO: be able to change recipients with this
+      <!--TODO: be able to change recipients with this
       <a href="#" class="add-recipient">
         <%= image_tag "icons/add.gif", :alt => "Add a recipient" %>
       </a> -->

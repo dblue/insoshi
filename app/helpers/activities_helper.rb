@@ -38,7 +38,7 @@ module ActivitiesHelper
         end
       end
     when "Event"
-      # TODO: make recent/long versions for this
+      #TODO: make recent/long versions for this
       event = activity.item.commentable
       commenter = activity.item.commenter
       %(#{person_link_with_image(commenter)} commented on 
@@ -204,10 +204,10 @@ module ActivitiesHelper
             when "Photo"
               "photo.png"
             when "Event"
-              # TODO: replace with a png icon
+              #TODO: replace with a png icon
               "time.gif"
             when "EventAttendee"
-              # TODO: replace with a png icon
+              #TODO: replace with a png icon
               "check.gif"
             else
               raise "Invalid activity type #{activity_type(activity).inspect}"

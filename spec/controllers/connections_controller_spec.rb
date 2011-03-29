@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe ConnectionsController do
-  integrate_views
+  render_views
   
   before(:each) do
     @person  = login_as(:quentin)
@@ -9,9 +9,9 @@ describe ConnectionsController do
   end
   
   it "should protect the create page" do
-    logout
+    sign_out :person
     post :create
-    response.should redirect_to(login_url)
+    response.should redirect_to(new_person_session_url)
   end
   
   it "should create a new connection request" do
@@ -22,7 +22,7 @@ describe ConnectionsController do
   end
   
   describe "with existing connection" do
-    integrate_views
+    render_views
     
     before(:each) do
       Connection.request(@person, @contact)

@@ -5,10 +5,6 @@ class Admin::PreferencesController < ApplicationController
   
   in_place_edit_for :post, :app_name
   
-  def index
-    render :action => "show"
-  end
-  
   def show
     respond_to do |format|
       format.html
@@ -48,7 +44,7 @@ class Admin::PreferencesController < ApplicationController
   private
     
     def setup
-      @preferences = Preference.first
+      @preferences = Preference.current
     end
     
     # The server needs to be restarted if the email settings change.
