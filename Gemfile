@@ -11,6 +11,7 @@ gem 'thinking-sphinx', '2.0.2', :require => 'thinking_sphinx'
 gem 'devise'
 gem 'will_paginate'
 gem 'dynamic_form'
+gem 'jquery-rails', '>= 0.2.6'
 
 group :test, :development do
   gem "rspec-rails", "~> 2.4"
