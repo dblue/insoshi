@@ -49,6 +49,7 @@ class Photo < ActiveRecord::Base
   validates_length_of :title, :maximum => 255, :allow_nil => true
   validates_presence_of :person_id
   validates_presence_of :gallery_id
+  validate :validate_image_file
   
   after_create :log_activity
   
@@ -57,7 +58,7 @@ class Photo < ActiveRecord::Base
   end
                  
   # Override the crappy default AttachmentFu error messages.
-  def validate
+  def validate_image_file
     if filename.nil?
       errors.add(:base, "You must choose a file to upload")
     else
