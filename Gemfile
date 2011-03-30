@@ -16,4 +16,5 @@ gem 'jquery-rails', '>= 0.2.6'
 group :test, :development do
   gem "rspec-rails", "~> 2.4"
   gem "webrat"
+  gem "rcov"
 end
