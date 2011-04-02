@@ -15,7 +15,11 @@ gem 'jquery-rails', '>= 0.2.6'
 gem 'uuid'
 
 group :test, :development do
+  gem "cucumber"
+  gem "capybara"
   gem "rspec-rails", "~> 2.4"
-  gem "webrat"
+  # gem "webrat"
+  gem "launchy"
   gem "rcov"
+  gem "factory_girl_rails"
 end
