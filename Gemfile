@@ -15,7 +15,9 @@ gem 'jquery-rails', '>= 0.2.6'
 gem 'uuid'
 
 group :test, :development do
-  gem "cucumber"
+  gem 'cucumber'
+  gem "cucumber-rails"
+  gem "database_cleaner"
   gem "capybara"
   gem "rspec-rails", "~> 2.4"
   # gem "webrat"

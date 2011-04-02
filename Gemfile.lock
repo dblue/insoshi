@@ -52,7 +52,12 @@ GEM
       gherkin (>= 2.3.5)
       json (>= 1.4.6)
       term-ansicolor (>= 1.0.5)
+    cucumber-rails (0.4.0)
+      cucumber (>= 0.10.1)
+      nokogiri (>= 1.4.4)
+      rack-test (>= 0.5.7)
     culerity (0.2.15)
+    database_cleaner (0.6.6)
     devise (1.1.8)
       bcrypt-ruby (~> 2.1.2)
       warden (~> 1.0.2)
@@ -151,6 +156,8 @@ DEPENDENCIES
   capybara
   chronic
   cucumber
+  cucumber-rails
+  database_cleaner
   devise
   dynamic_form
   factory_girl_rails
