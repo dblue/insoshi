@@ -15,6 +15,7 @@ end
 # This stub here fixes the problem.
 unless test?
   require 'uuid'
+  UUID.state_file = File.join(Rails.root, "config", "keys", "uuid.state")
 else
   class UUID
     def self.new

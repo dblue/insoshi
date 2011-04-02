@@ -11,7 +11,7 @@ class AddAdmin < ActiveRecord::Migration
     add_column :people, :deactivated, :boolean, 
                         :default => false, :null => false
     
-    key = Crypto::Key.from_file("#{RAILS_ROOT}/rsa_key.pub")
+    key = Crypto::Key.from_file(File.join(Rails.root, 'config', 'keys', 'rsa_key.pub'))
     person = Person.new(:email => "admin@example.com",
                         :name => "admin",
                         :crypted_password => key.encrypt("admin"),

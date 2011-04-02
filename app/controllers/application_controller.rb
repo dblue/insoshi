@@ -49,10 +49,11 @@ class ApplicationController < ActionController::Base
     
     # A tracker to tell us about the activity of Insoshi installs.
     def tracker_vars
-      File.open("identifier", "w") do |f|
+      identifier = File.join(Rails.root, "config", "identifier")
+      File.open(identifier, "w") do |f|
         f.write UUID.new
-      end unless File.exist?("identifier")
-      @tracker_id = File.open("identifier").read rescue nil
+      end unless File.exist?(identifier)
+      @tracker_id = File.open(identifier).read rescue nil
       @env = Rails.env
     end
     
