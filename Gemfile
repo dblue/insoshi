@@ -16,7 +16,7 @@ gem 'uuid'
 
 group :test, :development do
   gem 'cucumber'
-  gem "cucumber-rails"
+  gem 'cucumber-rails', :git => 'git://github.com/aslakhellesoy/cucumber-rails.git'      
   gem "database_cleaner"
   gem "capybara"
   gem "rspec-rails", "~> 2.4"
@@ -24,4 +24,5 @@ group :test, :development do
   gem "launchy"
   gem "rcov"
   gem "factory_girl_rails"
+  gem 'silent-postgres'
 end

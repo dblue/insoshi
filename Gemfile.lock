@@ -1,3 +1,12 @@
+GIT
+  remote: git://github.com/aslakhellesoy/cucumber-rails.git
+  revision: d0b9c0b261492f8930ee5b33d38247d3e8c1b254
+  specs:
+    cucumber-rails (0.4.1)
+      cucumber (>= 0.10.1)
+      nokogiri (>= 1.4.4)
+      rack-test (>= 0.5.7)
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -52,10 +61,6 @@ GEM
       gherkin (>= 2.3.5)
       json (>= 1.4.6)
       term-ansicolor (>= 1.0.5)
-    cucumber-rails (0.4.0)
-      cucumber (>= 0.10.1)
-      nokogiri (>= 1.4.4)
-      rack-test (>= 0.5.7)
     culerity (0.2.15)
     database_cleaner (0.6.6)
     devise (1.1.8)
@@ -132,6 +137,7 @@ GEM
       ffi (>= 1.0.7)
       json_pure
       rubyzip
+    silent-postgres (0.0.7)
     term-ansicolor (1.0.5)
     thinking-sphinx (2.0.2)
       activerecord (>= 3.0.3)
@@ -156,7 +162,7 @@ DEPENDENCIES
   capybara
   chronic
   cucumber
-  cucumber-rails
+  cucumber-rails!
   database_cleaner
   devise
   dynamic_form
@@ -167,6 +173,7 @@ DEPENDENCIES
   rails (= 3.0.5)
   rcov
   rspec-rails (~> 2.4)
+  silent-postgres
   thinking-sphinx (= 2.0.2)
   uuid
   will_paginate
