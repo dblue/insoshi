@@ -10,6 +10,7 @@ development:
 test:
   <<: *common
   database: insoshi_test
+  min_messages: warning #magic sauce
 
 production:
   <<: *common
