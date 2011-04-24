@@ -121,30 +121,31 @@ module CustomModelMatchers
     DestroyAssociated.new(attribute)
   end
   
-  
+
+  # DB: Pick this up in view_matchers instead.
   # Return true if an array includes the given attribute.
   # Usage: @person.contacts.should contain(@contact)
-  class Include
-  
-    def initialize(attribute)
-      @attribute = attribute
-    end
-    
-    def matches?(object)
-      object.include?(@attribute)
-    end
-    
-    def failure_message
-      "Expected array to include #{@attribute}"
-    end
-    
-    def negative_failure_message
-      "Expected array not to include #{@attribute}"
-    end
-  end
-  
+  # class Include
   # 
-  def contain(attribute)
-    Include.new(attribute)
-  end
+  #   def initialize(attribute)
+  #     @attribute = attribute
+  #   end
+  #   
+  #   def matches?(object)
+  #     object.include?(@attribute)
+  #   end
+  #   
+  #   def failure_message
+  #     "Expected array to include #{@attribute}"
+  #   end
+  #   
+  #   def negative_failure_message
+  #     "Expected array not to include #{@attribute}"
+  #   end
+  # end
+  # 
+  # # 
+  # def contain(attribute)
+  #   Include.new(attribute)
+  # end
 end

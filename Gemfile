@@ -13,6 +13,7 @@ gem 'will_paginate'
 gem 'dynamic_form'
 gem 'jquery-rails', '>= 0.2.6'
 gem 'uuid'
+gem 'haml'
 
 group :test, :development do
   gem 'cucumber'

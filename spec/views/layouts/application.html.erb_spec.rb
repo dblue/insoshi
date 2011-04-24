@@ -11,19 +11,23 @@ describe "/layouts/application.html.erb" do
     end
   
     it "should have a login link" do
-      rendered.should have_selector('a', :href => new_person_session_path)
+      # rendered.should have_selector('a', :href => new_person_session_path)
+      rendered.should contain(new_person_session_path).within('a')
     end
   
     it "should have a signup link" do
-      rendered.should have_selector('a', :href => new_person_registration_path)
+      # rendered.should have_selector('a', :href => new_person_registration_path)
+      rendered.should contain(new_person_registration_path).within('a')
     end
   
     it "should not have a sign out link" do
-      rendered.should_not have_selector('a', :href => destroy_person_session_path)
+      # rendered.should_not have_selector('a', :href => destroy_person_session_path)
+      rendered.should_not contain(destroy_person_session_path).within('a')
     end
   
     it "should have the right analytics" do
-      rendered.should have_selector("script", :content => "Google analytics")
+      # rendered.should have_selector("script", :content => "Google analytics")
+      rendered.should contain("Google analytics").within('script')
     end
   end
 
@@ -35,15 +39,18 @@ describe "/layouts/application.html.erb" do
     end
   
     it "should not have a login link" do
-      rendered.should_not have_selector('a', :href => new_person_session_path)
+      # rendered.should_not have_selector('a', :href => new_person_session_path)
+      rendered.should_not contain(new_person_session_path).within('a')
     end
   
     it "should not have a signup link" do
-      rendered.should_not have_selector('a', :href => new_person_registration_path)
+      # rendered.should_not have_selector('a', :href => new_person_registration_path)
+      rendered.should_not contain(new_person_registration_path).within('a')
     end
   
     it "should have a sign out link" do
-      rendered.should have_selector('a', :href => destroy_person_session_path)
+      # rendered.should have_selector('a', :href => destroy_person_session_path)
+      rendered.should contain(destroy_person_session_path).within('a')
     end
   
     it "should have a profile link" do

@@ -19,13 +19,15 @@ describe "/people/show.html.erb" do
   end
 
   it "should have the right title" do
-    rendered.should have_selector("h2", :content => @person.name)
+    # rendered.should have_selector("h2", :content => @person.name)
+    rendered.should contain(@person.name).within('h2')
   end
   
   it "should have a Markdown-ed description if BlueCloth is present" do
     begin
       BlueCloth.new("used to raise an exception")
-      rendered.should have_selector('em', :content => "bar")
+      # rendered.should have_selector('em', :content => "bar")
+      rendered.should contain('bar').within('em')
     rescue NameError
       nil
     end
