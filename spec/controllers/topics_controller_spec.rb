@@ -4,12 +4,12 @@ describe TopicsController do
   render_views
 
   before(:each) do
-    @topic = topics(:one)
-    @forum = forums(:one)
+    @forum = Factory(:forum)
+    @topic = Factory(:topic, :forum => @forum)
   end
   
   it "should require login for new" do
-    with_options :forum_id => forums(:one) do |page|
+    with_options :forum_id => @forum do |page|
       page.get :new
       response.should redirect_to(new_person_session_url)
     end
@@ -18,7 +18,7 @@ describe TopicsController do
   it "should have working pages" do
     login_as :quentin
     
-    with_options :forum_id => forums(:one) do |page|
+    with_options :forum_id => @forum do |page|
       page.get    :new
       page.get    :edit,    :id => @topic
       page.post   :create,  :topic => { :name => "The topic" }
@@ -29,7 +29,7 @@ describe TopicsController do
   
   it "should associate a person to a topic" do
     person = login_as(:quentin)
-    with_options :forum_id => forums(:one) do |page|
+    with_options :forum_id => @forum do |page|
       page.post :create, :topic => { :name => "The topic" }
       assigns(:topic).person.should == person
     end

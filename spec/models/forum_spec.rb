@@ -6,10 +6,10 @@ describe Forum do
   end
   
   it "should have topics" do
-    forums(:one).topics.should be_a_kind_of(Array)
+    Factory(:forum).topics.should be_a_kind_of(Array)
   end
   
   it "should have posts" do
-    forums(:one).posts.should be_a_kind_of(Array)
+    Factory(:forum).posts.should be_a_kind_of(Array)
   end
 end

@@ -2,26 +2,24 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 describe Activity do
   before(:each) do
-    @person = people(:quentin)
-    @commenter = people(:aaron)
+    @person = Factory.create(:aaron)
+    @commenter = Factory.create(:quentin)
   end
 
   it "should delete a post activity along with its parent item" do
-    @post = topics(:one).posts.unsafe_create(:body => "Hey there", 
-                                             :person => @person)
+    @post = Factory(:forum_post, :person => @person)
     destroy_should_remove_activity(@post)
   end
   
   it "should delete a comment activity along with its parent item" do
-    @comment = @person.comments.unsafe_create(:body => "Hey there",
-                                              :commenter => @commenter)
+    @comment = Factory(:wall_comment, :person => @person,
+                       :commenter => @commenter)
     destroy_should_remove_activity(@comment)
   end
   
   it "should delete topic & post activities along with the parent items" do
-    @topic = forums(:one).topics.unsafe_create(:name => "A topic",
-                                               :person => @person)
-    post = @topic.posts.unsafe_create(:body => "body", :person =>  @person)
+    @topic = Factory(:topic, :person => @person)
+    post = Factory(:forum_post, :topic => @topic, :person => @person)
     @topic.posts.each do |post|
       destroy_should_remove_activity(post)
     end
@@ -29,24 +27,23 @@ describe Activity do
   end
   
   it "should delete an associated connection" do
-    @person = people(:quentin)
-    @contact = people(:aaron)
+    @contact = Factory.create(:person)
     Connection.connect(@person, @contact)
     @connection = Connection.conn(@person, @contact)
     destroy_should_remove_activity(@connection, :breakup)
   end
-  
-  before(:each) do
-    # Create an activity.
+    
+  it "should have a nonempty global feed" do
+    # create an activity
     @person.comments.unsafe_create(:body => "Hey there",
                                    :commenter => @commenter)
-  end
-  
-  it "should have a nonempty global feed" do
     Activity.global_feed.should_not be_empty
   end
   
   it "should not show activities for users who are inactive" do
+    # create an activity
+    @person.comments.unsafe_create(:body => "Hey there",
+                                   :commenter => @commenter)
     @person.activities.collect(&:person).should include(@commenter)
     @commenter.toggle!(:deactivated)
     @commenter.should be_deactivated
@@ -56,7 +53,10 @@ describe Activity do
   end
   
   it "should not show activities for users who are email unverified" do
-    @commenter.email_verified = false; @commenter.save!
+    # create an activity
+    @person.comments.unsafe_create(:body => "Hey there",
+                                   :commenter => @commenter)
+    @commenter.confirmed_at = nil; @commenter.save!
     Activity.global_feed.should be_empty
   end
   

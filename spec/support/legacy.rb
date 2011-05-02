@@ -12,14 +12,6 @@ RSpec.configure do |config|
     return t
   end
 
-  def mock_photo(options = {})
-    photo = mock_model(Photo)
-    photo.stub!(:public_filename).and_return("photo.png")
-    photo.stub!(:primary).and_return(options[:primary])
-    photo.stub!(:primary?).and_return(photo.primary)
-    photo
-  end
-
   # Write response body to output file.
   # This can be very helpful when debugging specs that test HTML.
   def output_body(response)
@@ -40,6 +32,6 @@ RSpec.configure do |config|
   end
 
   def enable_email_notifications
-    Preference.find(:first).update_attributes(:email_verifications => true)      
+    Preference.global_prefs.update_attributes!(:email_verifications => true)      
   end
 end

@@ -3,7 +3,7 @@ module ApplicationHelper
   
   ## Application-wide values
   def app_name
-    name = global_prefs.app_name
+    name = Preference.global_prefs.app_name
     default = "Insoshi"
     name.blank? ? default : name
   end
@@ -43,7 +43,7 @@ module ApplicationHelper
     else
       links = [home, people]
     end
-    if global_prefs.about.blank?
+    if Preference.global_prefs.about.blank?
       links
     else
       links.push(menu_element("About", about_url))
@@ -65,7 +65,7 @@ module ApplicationHelper
   end
   
   def login_block
-    forgot = global_prefs.can_send_email? ? '<br />' + link_to('I forgot my password', new_password_reminder_path) : ''
+    forgot = Preference.global_prefs.can_send_email? ? '<br />' + link_to('I forgot my password', new_password_reminder_path) : ''
     content_tag(:span, link_to("Sign in", new_person_session_path) + ' or ' +
                        link_to("Sign up", new_person_registration_path) + 
                        forgot)

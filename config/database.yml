@@ -6,6 +6,7 @@ common: &common
 development:
   <<: *common
   database: insoshi_development
+  min_messages: warning #magic sauce
 
 test:
   <<: *common

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110330224328) do
+ActiveRecord::Schema.define(:version => 20110424172533) do
 
   create_table "activities", :force => true do |t|
     t.boolean  "public"
@@ -208,12 +208,11 @@ ActiveRecord::Schema.define(:version => 20110330224328) do
 
   create_table "photos", :force => true do |t|
     t.integer  "person_id"
-    t.integer  "parent_id"
-    t.string   "content_type"
-    t.string   "filename"
-    t.integer  "size"
-    t.integer  "width"
-    t.integer  "height"
+    t.string   "photo_mime_type"
+    t.string   "photo_name"
+    t.integer  "photo_size"
+    t.integer  "photo_width"
+    t.integer  "photo_height"
     t.boolean  "primary"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -221,9 +220,10 @@ ActiveRecord::Schema.define(:version => 20110330224328) do
     t.integer  "gallery_id"
     t.string   "title"
     t.integer  "position"
+    t.string   "photo_uid"
+    t.string   "photo_ext"
   end
 
-  add_index "photos", ["parent_id"], :name => "index_photos_on_parent_id"
   add_index "photos", ["person_id"], :name => "index_photos_on_person_id"
 
   create_table "posts", :force => true do |t|

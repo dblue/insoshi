@@ -24,9 +24,9 @@ class Comment < ActiveRecord::Base
   belongs_to :commenter, :class_name => "Person",
                          :foreign_key => "commenter_id"
 
-  belongs_to :person, :counter_cache => true
-  belongs_to :post
-  belongs_to :event
+  belongs_to :person, :counter_cache => "wall_comments_count"
+  # belongs_to :post
+  # belongs_to :event
 
   has_many :activities, :foreign_key => "item_id",
                         :conditions => "item_type = 'Comment'",
@@ -87,11 +87,11 @@ class Comment < ActiveRecord::Base
     def send_receipt_reminder
       return if commenter == commented_person
       if wall_comment?
-        @send_mail ||= Comment.global_prefs.email_notifications? &&
+        @send_mail ||= Preference.global_prefs.email_notifications? &&
                        commented_person.wall_comment_notifications?
         PersonMailer.wall_comment_notification(self).deliver if @send_mail
       elsif blog_post_comment?
-        @send_mail ||= Comment.global_prefs.email_notifications? &&
+        @send_mail ||= Preference.global_prefs.email_notifications? &&
                        commented_person.blog_comment_notifications?
         PersonMailer.blog_comment_notification(self).deliver if @send_mail
       end

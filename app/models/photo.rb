@@ -27,18 +27,30 @@ class Photo < ActiveRecord::Base
   
   # attr_accessible is a nightmare with attachment_fu, so use
   # attr_protected instead.
-  attr_protected :id, :person_id, :parent_id, :created_at, :updated_at
+  # attr_protected :id, :person_id, :parent_id, :created_at, :updated_at
   
   belongs_to :person
-  has_attachment :content_type => :image,
-                 :storage => :file_system,
-                 :max_size => UPLOAD_LIMIT.megabytes,
-                 :min_size => 1,
-                 :resize_to => '240>',
-                 :thumbnails => { :thumbnail    => '72>',
-                                  :icon         => '36>',
-                                  :bounded_icon => '36x36>' },
-                 :thumbnail_class => Thumbnail
+
+  image_accessor :photo
+  validates :photo, :presence  => {},
+                    :length    => { :maximum => UPLOAD_LIMIT.megabytes }
+  validates_property :mime_type, :of => :photo, :in => %w(image/jpeg image/png image/gif image/tiff),
+                     :message => :incorrect_format  
+
+  #TODO: remove person and gallery for tests; use factory_girl instead
+  attr_accessible :id, :photo, :photo_size, :avatar, :primary
+
+  delegate :size, :mime_type, :url, :width, :height, :thumb, :to => :photo
+
+  # has_attachment :content_type => :image,
+  #                :storage => :file_system,
+  #                :max_size => UPLOAD_LIMIT.megabytes,
+  #                :min_size => 1,
+  #                :resize_to => '240>',
+  #                :thumbnails => { :thumbnail    => '72>',
+  #                                 :icon         => '36>',
+  #                                 :bounded_icon => '36x36>' },
+  #                :thumbnail_class => Thumbnail
 
   belongs_to :gallery, :counter_cache => true
   acts_as_list :scope => :gallery_id  
@@ -49,7 +61,6 @@ class Photo < ActiveRecord::Base
   validates_length_of :title, :maximum => 255, :allow_nil => true
   validates_presence_of :person_id
   validates_presence_of :gallery_id
-  validate :validate_image_file
   
   after_create :log_activity
   
@@ -57,24 +68,24 @@ class Photo < ActiveRecord::Base
     16
   end
                  
-  # Override the crappy default AttachmentFu error messages.
-  def validate_image_file
-    if filename.nil?
-      errors.add(:base, "You must choose a file to upload")
-    else
-      # Images should only be GIF, JPEG, or PNG
-      enum = attachment_options[:content_type]
-      unless enum.nil? || enum.include?(send(:content_type))
-        errors.add(:base, "You can only upload images (GIF, JPEG, or PNG)")
-      end
-      # Images should be less than UPLOAD_LIMIT MB.
-      enum = attachment_options[:size]
-      unless enum.nil? || enum.include?(send(:size))
-        msg = "Images should be smaller than #{UPLOAD_LIMIT} MB"
-        errors.add(:base, msg)
-      end
-    end
-  end
+  # # Override the crappy default AttachmentFu error messages.
+  # def validate_image_file
+  #   if filename.nil?
+  #     errors.add(:base, "You must choose a file to upload")
+  #   else
+  #     # Images should only be GIF, JPEG, or PNG
+  #     enum = attachment_options[:content_type]
+  #     unless enum.nil? || enum.include?(send(:content_type))
+  #       errors.add(:base, "You can only upload images (GIF, JPEG, or PNG)")
+  #     end
+  #     # Images should be less than UPLOAD_LIMIT MB.
+  #     enum = attachment_options[:size]
+  #     unless enum.nil? || enum.include?(send(:size))
+  #       msg = "Images should be smaller than #{UPLOAD_LIMIT} MB"
+  #       errors.add(:base, msg)
+  #     end
+  #   end
+  # end
   
   def label
     title.nil? ? "" : title

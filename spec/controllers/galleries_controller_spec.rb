@@ -13,10 +13,10 @@ describe GalleriesController do
     render_views
   
     before(:each) do
-      @gallery = galleries(:valid_gallery)
-      @person  = people(:quentin)
-      @person.galleries.create(:title => "the title")
-      login_as(:quentin)
+      @person  = Factory(:person)
+      @gallery = Factory(:gallery, :person => @person)
+      @person.galleries << Factory(:gallery, :person => @person)
+      login_as(@person)
     end
     
     it "should have working pages" do |page|

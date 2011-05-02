@@ -49,22 +49,22 @@ class Gallery < ActiveRecord::Base
   end
   
   def primary_photo_url
-    primary_photo.nil? ? "default.png" : primary_photo.public_filename
+    primary_photo.nil? ? "default.png" : primary_photo('240>').url
   end
 
   def thumbnail_url
     primary_photo.nil? ? "default_thumbnail.png" :
-                          primary_photo.public_filename(:thumbnail)
+                          primary_photo.thumb('72>').url
   end
 
   def icon_url
     primary_photo.nil? ? "default_icon.png" :
-                         primary_photo.public_filename(:icon)
+                         primary_photo.thumb('36>').url
   end
 
   def bounded_icon_url
     primary_photo.nil? ? "default_icon.png" :
-                         primary_photo.public_filename(:bounded_icon)
+                         primary_photo.thumb('36x36>').url
   end
     
   def short_description

@@ -26,15 +26,15 @@ ActionController::Base.allow_rescue = false
 
 Cucumber::Rails::World.use_transactional_fixtures = true
 
-# Don't drop the Preferences table as global_prefs require it.
+# Don't drop the Preferences table as Preference.global_prefs require it.
 DatabaseCleaner.orm = :active_record
 DatabaseCleaner.strategy = :truncation, {:except => %w[preferences]}
 
 #Seed the DB
-Fixtures.reset_cache  
-fixtures_folder = File.join(Rails.root.to_s, 'spec', 'fixtures')
-fixtures = Dir[File.join(fixtures_folder, '*.yml')].map {|f| File.basename(f, '.yml') }
-Fixtures.create_fixtures(fixtures_folder, fixtures)
+# Fixtures.reset_cache  
+# fixtures_folder = File.join(Rails.root.to_s, 'spec', 'fixtures')
+# fixtures = Dir[File.join(fixtures_folder, '*.yml')].map {|f| File.basename(f, '.yml') }
+# Fixtures.create_fixtures(fixtures_folder, fixtures)
 
 Before do
   DatabaseCleaner.start

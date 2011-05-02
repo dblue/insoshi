@@ -157,10 +157,10 @@ class PostsController < ApplicationController
     def new_resource_post
       if forum?
         post = @topic.posts.build(params[:post])
-        post.person = current_person
       elsif blog?
         post = @blog.posts.new(params[:post])
       end
+      post.person = current_person
       post
     end
     

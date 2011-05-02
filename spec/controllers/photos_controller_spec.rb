@@ -1,5 +1,5 @@
 require File.dirname(__FILE__) + '/../spec_helper'
-require "thumbnail"
+# require "thumbnail"
 
 class Thumbnail
 
@@ -30,20 +30,18 @@ describe PhotosController do
     before(:each) do
 
       @person = login_as(:quentin)
-      @gallery = galleries(:valid_gallery)
+      @gallery = Factory(:gallery, :person => @person)
       
-      @filename = "rails.png"
-      @image = uploaded_file(@filename, "image/png")
-      @primary = Photo.create(:uploaded_data => @image,
-                              :person => people(:quentin),
-                              :gallery => @gallery,
-                              :avatar => true, 
-                              :primary => true)
-      @secondary = Photo.create(:uploaded_data => @image,
-                                :person => people(:quentin),
-                                :gallery => @gallery,
-                                :avatar => false,
-                                :primary => false)
+      @primary = Factory(:photo, 
+                         :person => @person,
+                         :gallery => @gallery,
+                         :avatar => true, 
+                         :primary => true)
+      @secondary = Factory(:photo,
+                           :person => @person,
+                           :gallery => @gallery,
+                           :avatar => false,
+                           :primary => false)
       @photo = @primary
     end
   
@@ -69,14 +67,14 @@ describe PhotosController do
     it "should create photo" do
       image = uploaded_file("rails.png")
       lambda do
-        post :create, :photo => { :uploaded_data => image},
+        post :create, :photo => { :photo => image},
                       :gallery_id => @gallery
       end.should change(Photo, :count).by(1)
     end
     
     it "should handle empty photo upload" do
       lambda do
-        post :create, :photo => { :uploaded_data => nil },
+        post :create, :photo => { :photo => nil },
                       :gallery_id => @gallery
         response.should render_template("new")
       end.should_not change(Photo, :count)

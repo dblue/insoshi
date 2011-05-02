@@ -4,42 +4,33 @@ describe Photo do
   
   before(:each) do
     @filename = "rails.png"
-    @person = people(:quentin)
-    @gallery = galleries(:valid_gallery)
+    @person = Factory(:person)
+    @gallery = Factory(:gallery)
     @image = uploaded_file(@filename, "image/png")
   end
   
   it "should upload successfully" do
-    new_photo.should be_valid
+    Factory.build(:photo).should be_valid
   end
   
   it "should be invalid without person_id" do
-    @person = nil
-    new_photo.should_not be_valid
+    Factory.build(:photo, :person => nil).should_not be_valid
   end
   
   it "should be invalid without gallery_id" do
-    @gallery = nil
-    new_photo.should_not be_valid
+    Factory.build(:photo, :gallery => nil).should_not be_valid
   end
   
   
   it "should have an associated person" do
-    new_photo.person.should == @person
+    Factory(:gallery, :person => @person).person.should == @person
   end
   
-  it "should not have default AttachmentFu errors for an empty image" do
-    photo = new_photo(:uploaded_data => nil)
+  it "should have errors for an empty image" do
+    photo = Factory.build(:photo, :photo => nil)
     photo.should_not be_valid
     photo.errors[:size].should be_empty
-    photo.errors[:base].should_not be_empty
+    photo.errors[:base].should be_empty
+    photo.errors[:photo].should_not be_empty
   end
-  
-  private
-  
-    def new_photo(options = {})
-      Photo.new({ :uploaded_data => @image,
-                  :person        => @person,
-                  :gallery       => @gallery }.merge(options))
-    end
 end

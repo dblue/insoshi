@@ -7,10 +7,10 @@ describe PostsController do
     render_views
   
     before(:each) do
-      @person = login_as(:quentin)
-      @forum  = forums(:one)
-      @topic  = topics(:one)
-      @post   = posts(:forum)
+      @person = login_as(:person)
+      @forum  = Forum.first || Factory(:forum)
+      @topic  = Factory(:topic, :forum => @forum, :person => @person)
+      @post   = Factory(:forum_post, :topic => @topic, :person => @person)
     end
     
     it "should have working pages" do
@@ -28,7 +28,7 @@ describe PostsController do
       lambda do
         post :create, :forum_id => @forum, :topic_id => @topic,
                       :post => { :body => "The body" }
-        topics = forum_topic_url(@forum, @topic, :posts => 2)
+        topics = forum_topic_url(@forum, @topic, :posts => @topic.posts.count)
         response.should redirect_to(topics)
       end.should change(ForumPost, :count).by(1)
     end
@@ -76,8 +76,8 @@ describe PostsController do
   
     before(:each) do
       @person = login_as(:quentin)
-      @blog   = @person.blog
-      @post   = posts(:blog_post)
+      @blog = @person.blog = Factory(:blog, :person => @person)
+      @post = Factory(:blog_post, :person => @person, :blog => @blog)
     end
   
     it "should have working pages" do
@@ -96,7 +96,7 @@ describe PostsController do
       lambda do
         post :create, :blog_id => @blog,
                       :post => { :title => "The post", :body => "The body" }
-        response.should redirect_to(blog_post_url(@blog, assigns(:post)))
+        response.should redirect_to(blog_post_url(@blog, assigns[:post]))
       end.should change(BlogPost, :count).by(1)
     end
     
@@ -136,7 +136,7 @@ describe PostsController do
     end
     
     it "should require the post being edited to belong to the blog" do
-      wrong_blog = blogs(:two)
+      wrong_blog = Factory(:blog)
       wrong_blog.should_not == @blog
       get :edit, :blog_id => wrong_blog, :id => @post
       response.should redirect_to(home_url)      

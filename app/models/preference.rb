@@ -31,10 +31,20 @@ class Preference < ActiveRecord::Base
   def self.current
     order("created_at DESC").limit(1).first
   end
+
+  def self.global_prefs
+    return Preference.current if test?
+    @global_prefs ||= Preference.current
+  end
   
   # Can we send mail with the present configuration?
   def can_send_email?
     not (domain.blank? or smtp_server.blank?)
+  end
+
+  def self.global_prefs
+    return Preference.current if test?
+    @global_prefs ||= Preference.current
   end
   
   private

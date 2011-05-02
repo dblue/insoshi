@@ -2,8 +2,8 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe EventAttendee do
   before(:each) do
-    @person = people(:aaron)
-    @event = events(:public)
+    @person = Factory.create(:aaron)
+    @event = Factory.create(:event, :privacy => 1)
     @event_attendee = EventAttendee.new(:event => @event,
                                         :person => @person)
   end

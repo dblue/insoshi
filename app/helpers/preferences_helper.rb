@@ -6,8 +6,4 @@ module PreferencesHelper
   # don't show up because of the ||=.  Usually, this is a feature (avoiding
   # the redundant database hits is the whole point of using ||= here), but
   # in test mode it's a pain in the ass.
-  def global_prefs
-    return Preference.current if test?
-    @global_prefs ||= Preference.current
-  end
 end

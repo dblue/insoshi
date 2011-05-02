@@ -1,12 +1,12 @@
 begin
   unless test?
-    global_prefs = Preference.first
-    if global_prefs.email_notifications?
+    Preference.global_prefs = Preference.first
+    if Preference.global_prefs.email_notifications?
       ActionMailer::Base.delivery_method = :smtp
       ActionMailer::Base.smtp_settings = {
-        :address    => global_prefs.smtp_server,
+        :address    => Preference.global_prefs.smtp_server,
         :port       => 25,
-        :domain     => global_prefs.domain
+        :domain     => Preference.global_prefs.domain
       }
     end
   end

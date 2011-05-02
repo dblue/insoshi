@@ -49,11 +49,11 @@ class PeopleController < ApplicationController
   def create
     @person = Person.new(params[:person])
     respond_to do |format|
-      @person.email_verified = false if global_prefs.email_verifications?
+      # @person.email_verified = false if Preference.global_prefs.email_verifications?
       @person.identity_url = ''
       @person.save
       if @person.errors.empty?
-        if global_prefs.email_verifications?
+        if Preference.global_prefs.email_verifications?
           @person.email_verifications.create
           flash[:notice] = %(Thanks for signing up! Check your email
                              to activate your account.)
@@ -81,20 +81,21 @@ class PeopleController < ApplicationController
     redirect_to home_url
   end
 
-  def verify_email
-    verification = EmailVerification.find_by_code(params[:id])
-    if verification.nil?
-      flash[:error] = "Invalid email verification code"
-      redirect_to home_url
-    else
-      cookies.delete :auth_token
-      person = verification.person
-      person.email_verified = true; person.save!
-      self.current_person = person
-      flash[:success] = "Email verified. Your profile is active!"
-      redirect_to person
-    end
-  end
+  # NOTE: confirmation is handled by Devise now. 
+  # def verify_email
+  #   verification = EmailVerification.find_by_code(params[:id])
+  #   if verification.nil?
+  #     flash[:error] = "Invalid email verification code"
+  #     redirect_to home_url
+  #   else
+  #     cookies.delete :auth_token
+  #     person = verification.person
+  #     person.email_verified = true; person.save!
+  #     self.current_person = person
+  #     flash[:success] = "Email verified. Your profile is active!"
+  #     redirect_to person
+  #   end
+  # end
 
   def edit
     @person = Person.find(params[:id])
@@ -119,7 +120,7 @@ class PeopleController < ApplicationController
           format.html { render :action => "edit" }
         end
       when 'password_edit'
-        if global_prefs.demo?
+        if Preference.global_prefs.demo?
           flash[:error] = "Passwords can't be changed in demo mode."
           redirect_to @person and return
         end

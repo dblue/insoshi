@@ -11,7 +11,7 @@
   <p><%= link_to "Go to gallery", gallery_path(@photo.gallery) %></p>
   
   <div class = "photo">
-    <%= image_tag(@photo.public_filename) %>
+    <%= image_tag(@photo.thumb('72>').url) %>
   </div>
 <% end %>
 

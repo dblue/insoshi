@@ -35,7 +35,7 @@ describe Admin::PeopleController do
     
     before(:each) do
       @admin = login_as(:admin)
-      @person = people(:aaron)
+      @person = Factory.create(:person)
     end
     
     it "should deactivate a person" do

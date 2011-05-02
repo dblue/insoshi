@@ -3,7 +3,7 @@ require File.dirname(__FILE__) + '/../spec_helper'
 describe Conversation do
   
   before(:each) do
-    @conversation = conversations(:one)
+    @conversation = Factory(:conversation)
   end
 
   it "should have many messages" do

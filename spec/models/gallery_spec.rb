@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 describe Gallery do
   before(:each) do
-    @gallery = galleries(:valid_gallery)
+    @gallery = Factory.build(:gallery)
   end
 
   it "should be valid" do
@@ -10,7 +10,7 @@ describe Gallery do
   end
   
   it "should require person_id" do
-    @gallery = galleries(:invalid_gallery)
+    @gallery.person = nil
     @gallery.should_not be_valid
     @gallery.errors[:person_id].should_not be_empty
   end
@@ -28,7 +28,7 @@ describe Gallery do
   end
   
   it "should have an activity" do
-    @gallery = Gallery.unsafe_create(:person => people(:kelly))
+    @gallery.save
     Activity.find_by_item_id(@gallery).should_not be_nil
   end
 end

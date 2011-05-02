@@ -17,8 +17,8 @@
     <%= render :partial => 'shared/contacts_preview',
                :locals => { :person => current_person } %>
   <%- else -%>
-    <%- unless global_prefs.app_name.blank? -%>
-      <h2>About <%= global_prefs.app_name %></h2>
+    <%- unless Preference.global_prefs.app_name.blank? -%>
+      <h2>About <%= Preference.global_prefs.app_name %></h2>
     
       <p>
         <%= link_to "Click here", about_path %>
@@ -27,7 +27,7 @@
     <%- end -%>
     
     <h2>Join
-      <%= global_prefs.app_name.blank? ? "the site" : global_prefs.app_name %>
+      <%= Preference.global_prefs.app_name.blank? ? "the site" : Preference.global_prefs.app_name %>
     </h2>
     
     <div style="text-align: center;">

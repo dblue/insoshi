@@ -4,8 +4,8 @@ describe ConnectionsController do
   render_views
   
   before(:each) do
-    @person  = login_as(:quentin)
-    @contact = people(:aaron)
+    @person  = login_as(:person)
+    @contact = Factory.create(:person)
   end
   
   it "should protect the create page" do

@@ -5,6 +5,7 @@ describe ForumsController do
   
   before(:each) do
     @person = login_as(:quentin)
+    @forum = Forum.first || Factory(:forum)
   end
   
   it "should redirect to the topics if there is only one forum" do

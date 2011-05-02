@@ -5,10 +5,10 @@ describe Connection do
   before(:each) do
     @emails = ActionMailer::Base.deliveries
     @emails.clear
-    @global_prefs = Preference.find(:first)
+    @global_prefs = Preference.global_prefs
     
-    @person = people(:quentin)
-    @contact = people(:aaron)
+    @person = Factory.create(:aaron)
+    @contact = Factory.create(:person)
   end
 
   describe "class methods" do
@@ -91,7 +91,9 @@ describe Connection do
   end
   
   it "should not create an activity for a connection with the first admin" do
-    connection = Connection.connect(@person, Person.find_first_admin)
+    # create the first admin
+    admin = Factory(:admin)
+    connection = Connection.connect(@person, admin)
     Activity.find_by_item_id(connection).should be_nil
   end
   

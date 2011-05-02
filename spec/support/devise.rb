@@ -7,7 +7,7 @@ RSpec.configure do |config|
     if person.is_a?(Person)
       id = person.id
     elsif person.is_a?(Symbol)
-      person = people(person)
+      person = Factory.create(person)
       id = person.id
     elsif person.nil?
       id = nil

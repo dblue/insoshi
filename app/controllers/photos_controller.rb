@@ -37,8 +37,9 @@ class PhotosController < ApplicationController
       redirect_to gallery_path(Gallery.find(params[:gallery_id])) and return
     end
 
-    photo_data = params[:photo].merge(:person => current_person)
+    photo_data = params[:photo]
     @photo = @gallery.photos.build(photo_data)
+    @photo.person = current_person
 
     respond_to do |format|
       if @photo.save

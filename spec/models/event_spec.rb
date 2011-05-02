@@ -1,50 +1,43 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe Event do
-  before(:each) do
-    @valid_attributes = {
-      :title => "value for title",
-      :description => "value for description",
-      :person => people(:aaron),
-      :start_time => Time.now,
-      :end_time => Time.now,
-      :reminder => false,
-      :privacy => 1
-    }
-  end
-
   it "should create a new instance given valid attributes" do
-    Event.unsafe_create!(@valid_attributes)
+    Factory(:event).should be_valid
   end
 
   describe "privacy settings" do
     before(:each) do
-      @person = people(:aaron)
-      @contact = people(:quentin)
+      @person = Factory.create(:aaron)
+      @contact = Factory.create(:quentin)
+      Connection.connect(@person, @contact)
+      @event = Factory.create(:event, :person => @person)
+      @private = Factory.create(:event, :person => @contact, :privacy => 2)
     end
+    
     it "should find all public events" do
-      Event.person_events(@person).should include(events(:public))
+      Event.person_events(@person).should include(@event)
     end
 
     it "should find contact's events" do
-      @person.stub!(:contact_ids).and_return([@contact.id])
-      Event.person_events(@person).should include(events(:private))
+      # @person.stub!(:contact_ids).and_return([@contact.id])
+      Event.person_events(@person).should include(@private)
     end
 
     it "should find own events" do
-      Event.person_events(@contact).should include(events(:private))
+      Event.person_events(@contact).should include(@private)
     end                   
     
     it 'should not find other private events who are not my friends' do
-      Event.person_events(@person).should_not include(events(:private))
+      @not_a_friend = Factory(:person)
+      Event.person_events(@not_a_friend).should_not include(@private)
     end
                                        
   end
 
   describe "attendees association" do
     before(:each) do
-      @event = events(:public)
-      @person = people(:aaron)
+      @event = Factory(:event)
+      @person = Factory(:person)
     end
     
     it "should allow people to attend" do
@@ -63,10 +56,11 @@ describe Event do
 
   describe "comments association" do
     before(:each) do
-      @event = events(:public)
+      @event = Factory(:event)
     end
 
     it "should have many comments" do
+      @event.comments.create Factory.attributes_for(:event_comment)
       @event.comments.should be_a_kind_of(Array)
       @event.comments.should_not be_empty
     end
@@ -74,7 +68,7 @@ describe Event do
 
   describe 'event activity association' do
     before(:each) do
-      @event = Event.unsafe_create(@valid_attributes)
+      @event = Factory(:event)
       @activity = Activity.find_by_item_id(@event)
     end
     

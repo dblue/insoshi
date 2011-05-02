@@ -23,10 +23,10 @@ describe Preference do
   end
 
   
-  describe "booleans from fixtures" do
+  describe "booleans from FactoryGirl" do
     
     before(:each) do
-      @preferences = preferences(:one)
+      @preferences = Factory(:preference)
     end
     
     it "should have true email notifications" do

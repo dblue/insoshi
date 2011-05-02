@@ -3,11 +3,10 @@ require File.dirname(__FILE__) + '/../spec_helper'
 describe PeopleController do
 
   before(:each) do
-    @person = people(:quentin)
-    photos = [mock_photo(:primary => true), mock_photo]
+    @person = login_as(:aaron)
+    photos = [Factory(:photo, :primary => true), Factory(:photo)]
     photos.stub!(:find_all_by_primary).and_return(photos.select(&:primary?))
     @person.stub!(:photos).and_return(photos)
-    login_as(:aaron)
   end
   
   describe "people pages" do
@@ -51,13 +50,13 @@ describe PeopleController do
       flash[:error].should =~ /not active/
     end
     
-    it "should redirect to home for email unverified users" do
+    it "should redirect to sign-in for email unverified users" do
       enable_email_notifications
-      @person.email_verified = false; @person.save!
+      @person.confirmed_at = nil; @person.save!
       @person.should_not be_active
       get :show, :id => @person
-      response.should redirect_to(home_url)
-      flash[:error].should =~ /not active/
+      response.should redirect_to(new_person_session_path)
+      flash[:alert].should =~ /confirm your account/
     end
   end
 
@@ -153,7 +152,7 @@ describe PeopleController do
     end
     
     it "should require the right authorized user" do
-      login_as(:aaron)
+      login_as(:person)
       put :update, :id => @person
       response.should redirect_to(home_url)
     end
@@ -201,7 +200,7 @@ describe PeopleController do
     #TODO: These belong in view specs.
     # it "should display break up link if connected" do
     #   login_as(@person)
-    #   @contact = people(:aaron)
+    #   @contact = Factory.build(:aaron)
     #   conn = Connection.connect(@person, @contact)
     #   get :show, :id => @contact.reload
     #   response.should have_tag("a[href=?]", connection_path(conn))
@@ -209,7 +208,7 @@ describe PeopleController do
     # 
     # it "should not display break up link if not connected" do
     #   login_as(@person)
-    #   @contact = people(:aaron)
+    #   @contact = Factory.build(:aaron)
     #   get :show, :id => @contact.reload
     #   response.should_not have_tag("a", :text => "Remove Connection")
     # end

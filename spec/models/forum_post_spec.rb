@@ -3,9 +3,7 @@ require File.dirname(__FILE__) + '/../spec_helper'
 describe ForumPost do
   
   before(:each) do
-    @post = ForumPost.new(:body => "Hey there")
-    @post.topic  = topics(:one)
-    @post.person = people(:quentin)
+    @post = Factory(:forum_post)
   end
   
   it "should be valid" do

@@ -25,7 +25,7 @@ class Admin::PreferencesController < ApplicationController
           # require_activation before filter to work.
           Person.transaction do
             Person.all.each do |person|
-              person.email_verified = true
+              person.confirmed_at = Time.now
               person.save
             end
           end

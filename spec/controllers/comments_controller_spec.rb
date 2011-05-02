@@ -7,15 +7,15 @@ describe CommentsController do
   
     before(:each) do
       @commenter = login_as(:aaron)
-      @blog   = people(:quentin).blog
-      @post   = posts(:blog_post)
+      @blog   = Factory(:blog)
+      @post   = Factory(:blog_post)
     end
   
     it "should have working pages" do
       with_options :blog_id => @blog, :post_id => @post do |page|
         page.get    :new
         page.post   :create,  :comment => { }
-        page.delete :destroy, :id => comments(:blog_comment)
+        page.delete :destroy, :id => Factory(:blog_comment)
       end
     end
     
@@ -49,14 +49,14 @@ describe CommentsController do
     
     it "should allow destroy" do
       login_as @blog.person
-      comment = comments(:blog_comment)
+      comment = Factory(:blog_comment)
       delete :destroy, :blog_id => @blog, :post_id => @post, :id => comment
       comment.should_not exist_in_database
     end
     
     it "should require the correct user to destroy a comment" do
       login_as @commenter
-      comment = comments(:blog_comment)
+      comment = Factory(:blog_comment)
       delete :destroy, :blog_id => @blog, :post_id => @post, :id => comment
       response.should redirect_to(home_url)
     end
@@ -67,16 +67,19 @@ describe CommentsController do
     render_views
   
     before(:each) do
-      @commenter = login_as(:aaron)
-      @person    = people(:quentin)
+      @comment   = Factory.create(:wall_comment)
+      @commenter = Factory.create(:person)
+      @person    = Factory.create(:person)
+      @person.comments << @comment
       Connection.connect(@person, @commenter)
+      login_as @commenter
     end
   
     it "should have working pages" do
       with_options :person_id => @person do |page|
         page.get    :new
         page.post   :create,  :comment => { }
-        page.delete :destroy, :id => comments(:wall_comment)
+        page.delete :destroy, :id => Factory(:wall_comment)
       end
     end
   
@@ -104,22 +107,19 @@ describe CommentsController do
     
     it "should allow destroy for person" do
       login_as @person
-      comment = comments(:wall_comment)
-      delete :destroy, :person_id => @person, :id => comment
-      comment.should_not exist_in_database
+      delete :destroy, :person_id => @person, :id => @comment
+      @comment.should_not exist_in_database
     end
     
     it "should allow destroy for commenter" do
-      comment = comments(:wall_comment)
-      login_as comment.commenter
-      delete :destroy, :person_id => @person, :id => comment
-      comment.should_not exist_in_database
+      login_as @comment.commenter
+      delete :destroy, :person_id => @comment.commenter, :id => @comment
+      @comment.should_not exist_in_database
     end
     
     it "should protect the destroy action" do
       login_as :kelly
-      comment = comments(:wall_comment)
-      delete :destroy, :person_id => @person, :id => comment
+      delete :destroy, :person_id => @person, :id => @comment
       response.should redirect_to(home_url)
     end
   end

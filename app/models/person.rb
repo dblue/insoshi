@@ -11,7 +11,7 @@
 #  description                :text            
 #  remember_token_expires_at  :datetime        
 #  last_contacted_at          :datetime        
-#  last_sign_in_at          :datetime        
+#  last_sign_in_at            :datetime        
 #  forum_posts_count          :integer(4)      default(0), not null
 #  blog_post_comments_count   :integer(4)      default(0), not null
 #  wall_comments_count        :integer(4)      default(0), not null
@@ -48,8 +48,8 @@ class Person < ActiveRecord::Base
   #                        'email_verified'],
   #           :conditions => "deactivated = false AND (email_verified IS NULL OR email_verified = true)"
   define_index do
-    indexes name, description, deactivated, email_verified
-    where "deactivated = false AND (email_verified IS NULL or email_verified = true)"
+    indexes name, description, deactivated
+    where "deactivated = false AND confirmed_at IS NOT NULL"
   end
   MAX_EMAIL = MAX_PASSWORD = 40
   MAX_NAME = 40
@@ -69,12 +69,12 @@ class Person < ActiveRecord::Base
   # methods in the has_many associations.  I hope you can do better.
   ACCEPTED_AND_ACTIVE =  [%(status = ? AND
                             deactivated = ? AND
-                            (email_verified IS NULL OR email_verified = ?)),
-                          Connection::ACCEPTED, false, true]
+                            confirmed_at IS NOT NULL),
+                          Connection::ACCEPTED, false]
   REQUESTED_AND_ACTIVE =  [%(status = ? AND
                             deactivated = ? AND
-                            (email_verified IS NULL OR email_verified = ?)),
-                          Connection::REQUESTED, false, true]
+                            confirmed_at IS NOT NULL),
+                          Connection::REQUESTED, false]
 
   has_one :blog
   has_many :email_verifications
@@ -158,7 +158,7 @@ class Person < ActiveRecord::Base
     # Return the first admin created.
     # We suggest using this admin as the primary administrative contact.
     def find_first_admin
-      self.where( :admin => true ).order(:created_at).first
+      self.where(:admin => true).order(:created_at).first
     end
   end
 
@@ -261,19 +261,19 @@ class Person < ActiveRecord::Base
   end
 
   def main_photo
-    photo.nil? ? "default.png" : photo.public_filename
+    photo.nil? ? "default.png" : photo.url
   end
 
   def thumbnail
-    photo.nil? ? "default_thumbnail.png" : photo.public_filename(:thumbnail)
+    photo.nil? ? "default_thumbnail.png" : photo.thumb('72>').url
   end
 
   def icon
-    photo.nil? ? "default_icon.png" : photo.public_filename(:icon)
+    photo.nil? ? "default_icon.png" : photo.thumb('36>').url
   end
 
   def bounded_icon
-    photo.nil? ? "default_icon.png" : photo.public_filename(:bounded_icon)
+    photo.nil? ? "default_icon.png" : photo.thumb('36x36>').url
   end
 
   # Return the photos ordered by primary first, then by created_at.
@@ -293,8 +293,8 @@ class Person < ActiveRecord::Base
   end
 
   def active?
-    if Person.global_prefs.email_verifications?
-      not deactivated? and email_verified?
+    if Preference.global_prefs.email_verifications?
+      not deactivated? and confirmed?
     else
       not deactivated?
     end
@@ -327,7 +327,7 @@ class Person < ActiveRecord::Base
     end
 
     def check_config_for_deactivation
-      if Person.global_prefs.whitelist?
+      if Preference.global_prefs.whitelist?
         self.deactivated = true
       end
     end
@@ -366,17 +366,17 @@ class Person < ActiveRecord::Base
       # Return the conditions for a user to be active.
       def conditions_for_active
         [%(deactivated = ? AND 
-           (email_verified IS NULL OR email_verified = ?)),
-         false, true]
+           confirmed_at IS NOT NULL),
+         false]
       end
       
       # Return the conditions for a user to be 'mostly' active.
       def conditions_for_mostly_active
         [%(deactivated = ? AND 
-           (email_verified IS NULL OR email_verified = ?) AND
+           confirmed_at IS NOT NULL AND
            (last_sign_in_at IS NOT NULL AND
             last_sign_in_at >= ?)),
-         false, true, TIME_AGO_FOR_MOSTLY_ACTIVE]
+         false, TIME_AGO_FOR_MOSTLY_ACTIVE]
       end
     end
 end

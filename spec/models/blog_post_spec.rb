@@ -3,8 +3,9 @@ require File.dirname(__FILE__) + '/../spec_helper'
 describe BlogPost do
   
   before(:each) do
-    @post = blogs(:one).posts.build(:title => "First post!",
-                                    :body => "Hey there")
+    @blog = Factory.create(:blog)
+    @post = @blog.posts.build(Factory.attributes_for(:blog_post))
+    @post.person = Factory(:person)
   end
   
   it "should be valid" do
@@ -48,7 +49,7 @@ describe BlogPost do
     before(:each) do
       @post.save
       @comment = @post.comments.unsafe_create(:body => "The body",
-                                              :commenter => people(:aaron))
+                                              :commenter => Factory.create(:aaron))
     end
     
     it "should have associated comments" do

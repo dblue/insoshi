@@ -2,11 +2,11 @@ class PersonMailer < ActionMailer::Base
   extend PreferencesHelper
   
   def domain
-    @domain ||= PersonMailer.global_prefs.domain
+    @domain ||= Preference.global_prefs.domain
   end
   
   def server
-    @server_name ||= PersonMailer.global_prefs.server_name
+    @server_name ||= Preference.global_prefs.server_name
   end
   
   def password_reminder(person)
@@ -79,7 +79,7 @@ class PersonMailer < ActionMailer::Base
   
     # Prepend the application name to subjects if present in preferences.
     def formatted_subject(text)
-      name = PersonMailer.global_prefs.app_name
+      name = Preference.global_prefs.app_name
       label = name.blank? ? "" : "[#{name}] "
       "#{label}#{text}"
     end

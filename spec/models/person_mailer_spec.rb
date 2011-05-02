@@ -3,14 +3,14 @@ require File.dirname(__FILE__) + '/../spec_helper'
 describe PersonMailer do
   
   before(:each) do
-    @preferences = preferences(:one)
+    @preferences = Factory(:preference)
     @server = @preferences.server_name
     @domain = @preferences.domain
   end
   
   describe "message notification" do
     before(:each) do
-      @message = people(:quentin).received_messages.first
+      @message = Factory.create(:message)
       @email = PersonMailer.message_notification(@message)
     end
 
@@ -29,8 +29,8 @@ describe PersonMailer do
 
   describe "connection request" do
     before(:each) do
-      @person  = people(:quentin)
-      @contact = people(:aaron)
+      @person  = Factory.create(:aaron)
+      @contact = Factory.create(:person)
       Connection.request(@person, @contact)
       @connection = Connection.conn(@contact, @person)
       @email = PersonMailer.connection_request(@connection)
@@ -62,7 +62,7 @@ describe PersonMailer do
 
   describe "blog comment notification" do
     before(:each) do
-      @comment = comments(:blog_comment)
+      @comment = Factory(:blog_comment)
       @email = PersonMailer.blog_comment_notification(@comment)
       @recipient = @comment.commented_person
       @commenter = @comment.commenter
@@ -92,7 +92,7 @@ describe PersonMailer do
 
   describe "wall comment notification" do
     before(:each) do
-      @comment = comments(:wall_comment)
+      @comment = Factory(:wall_comment)
       @email = PersonMailer.wall_comment_notification(@comment)
       @recipient = @comment.commented_person
       @commenter = @comment.commenter
@@ -118,27 +118,4 @@ describe PersonMailer do
     end
   end
 
-  describe "email verification" do
-    before(:each) do
-      @ev = email_verifications(:one)
-      @email = PersonMailer.email_verification(@ev)
-    end
-
-    it "should have the right recipient" do
-      @email.to.first.should == @ev.person.email
-    end
-
-    it "should have the right subject" do
-      @email.subject.should == "[Example] Email verification"
-    end
-
-    it "should have a URL to the verification page" do
-      url = "http://#{@server}/people/verify/#{@ev.code}"
-      @email.body.should =~ /#{url}/
-    end
-
-    it "should have the right server name in the body" do
-      @email.body.should =~ /#{@server}/
-    end
-  end
 end

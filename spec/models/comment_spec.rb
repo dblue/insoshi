@@ -1,12 +1,13 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe Comment do
+  
   describe "blog post comments" do
     
     before(:each) do
-      @post = posts(:blog_post)
-      @comment = @post.comments.unsafe_build(:body => "Hey there",
-                                             :commenter => people(:aaron))
+      @post = Factory.create(:blog_post)
+      @comment = @post.comments.build(Factory.attributes_for(:blog_comment))
+      @comment.commenter = Factory.create(:person)
     end
   
     it "should be valid" do
@@ -25,7 +26,7 @@ describe Comment do
   
     it "should increase the comment count" do
       old_count = @post.comments.count
-      @comment.save!
+      @comment.save
       @post.comments.count.should == old_count + 1
     end
   
@@ -66,7 +67,7 @@ describe Comment do
       before(:each) do
         @emails = ActionMailer::Base.deliveries
         @emails.clear
-        @global_prefs = Preference.find(:first)
+        @global_prefs = Preference.global_prefs
         @recipient = @comment.commented_person
       end
       
@@ -105,9 +106,9 @@ describe Comment do
   describe "wall comments" do
   
     before(:each) do
-      @person = people(:quentin)
-      @comment = @person.comments.unsafe_build(:body => "Hey there",
-                                               :commenter => people(:aaron))
+      @person = Factory.create(:aaron)
+      @comment = @person.comments.build(Factory.attributes_for(:wall_comment))
+      @comment.commenter = Factory.create(:person)
     end
   
     it "should be valid" do
@@ -146,7 +147,7 @@ describe Comment do
       before(:each) do
         @emails = ActionMailer::Base.deliveries
         @emails.clear
-        @global_prefs = Preference.find(:first)
+        @global_prefs = Preference.global_prefs
         @recipient = @comment.commented_person
       end
     
@@ -184,9 +185,9 @@ describe Comment do
   describe "feed items for contacts" do
 
     before(:each) do
-      @person = people(:quentin)
-      @contact = people(:aaron)
-      @second_contact = people(:kelly)
+      @person = Factory.create(:aaron)
+      @contact = Factory.create(:quentin)
+      @second_contact = Factory.create(:kelly)
       Connection.connect(@person, @contact)
       Connection.connect(@person, @second_contact)
     end

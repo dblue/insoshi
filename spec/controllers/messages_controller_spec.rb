@@ -8,7 +8,9 @@ describe MessagesController do
     @emails.clear    
 
     @person = login_as(:quentin)
-    @other_person = people(:aaron)
+    1.upto(3) {Factory(:message, :recipient => @person)}
+      
+    @other_person = Factory(:person)
     @message = @person.received_messages.first
   end
 

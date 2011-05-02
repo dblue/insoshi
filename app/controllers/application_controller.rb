@@ -42,7 +42,8 @@ class ApplicationController < ActionController::Base
     def require_activation
       if person_signed_in?
         unless current_person.active? or current_person.admin?
-          redirect_to logout_url
+          flash[:error] = "Your account is not active."
+          redirect_to home_url
         end
       end
     end

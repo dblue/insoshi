@@ -25,6 +25,7 @@ class BlogPost < Post
   has_many :comments, :as => :commentable, :order => :created_at,
                       :dependent => :destroy
   
+  validates_presence_of :blog
   validates_presence_of :title, :body
   validates_length_of :title, :maximum => MAX_TITLE
   validates_length_of :body, :maximum => MAX_BODY

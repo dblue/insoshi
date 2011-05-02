@@ -46,7 +46,7 @@ describe Admin::PreferencesController do
       put :update, :preferences => { :email_verifications => "1" }
       @prefs.reload.email_verifications.should be_true
       Person.all.each do |person|
-        person.should be_email_verified
+        person.should be_true
       end
     end
     

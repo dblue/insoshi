@@ -14,6 +14,8 @@ gem 'dynamic_form'
 gem 'jquery-rails', '>= 0.2.6'
 gem 'uuid'
 gem 'haml'
+gem 'dragonfly'
+gem 'rack-cache', :require => 'rack/cache'
 
 group :test, :development do
   gem 'cucumber'
@@ -21,7 +23,6 @@ group :test, :development do
   gem "database_cleaner"
   gem "capybara"
   gem "rspec-rails", "~> 2.4"
-  # gem "webrat"
   gem "launchy"
   gem "rcov"
   gem "factory_girl_rails"

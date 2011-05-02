@@ -47,6 +47,7 @@ Insoshi::Application.routes.draw do
     
     #NOTE: This is a singular resource with the name 'preferences'
     resource :preferences
+    
     resources :forums do  
       resources :topics do    
         resources :posts

@@ -2,12 +2,12 @@
   <div class='gallPhotoTitle'>
     <%= link_to photo.label, '#gpu' + photo_id(photo), :rel => 'facebox' %>
     <div style="display: none;" id="gpu<%= photo_id(photo) -%>">
-      <%= image_tag photo.public_filename %> 
+      <%= image_tag photo.thumb('72>').url %> 
       <div class="gpuTitle"><%= photo.label %></div>
     </div>
   </div>
   <div class='gallPhoto'>
-    <%= link_to image_tag(photo.public_filename(:thumbnail)),
+    <%= link_to image_tag(photo.thumb('72>').url(:thumbnail)),
                 '#gpu' + photo_id(photo), :rel => 'facebox' %>
   </div>
   <%- if current_person?(photo.person) -%>
